@@ -1,8 +1,13 @@
+import { Switch } from "react-router-dom";
+import PublicRoutes from "routes/PublicRoutes";
+
 function App() {
   return (
-    <div>
-      <h1>Surveasy!</h1>
-    </div>
+    <>
+      <Switch>
+        <PublicRoutes />
+      </Switch>
+    </>
   );
 }
 
