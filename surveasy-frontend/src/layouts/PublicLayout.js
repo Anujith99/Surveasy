@@ -1,7 +1,13 @@
 import React from "react";
+import Navbar from "components/Navbar";
 
 const PublicLayout = ({ children }) => {
-  return <div>{children}</div>;
+  return (
+    <>
+      <Navbar />
+      <div>{children}</div>
+    </>
+  );
 };
 
 export default PublicLayout;

@@ -1,7 +1,8 @@
 import React from "react";
+import { Box } from "@chakra-ui/react";
 
 const Homepage = () => {
-  return <div>Surveasy!</div>;
+  return <Box>Surveasy!</Box>;
 };
 
 export default Homepage;
