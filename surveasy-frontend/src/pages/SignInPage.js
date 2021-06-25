@@ -7,9 +7,9 @@ const SignInPage = () => {
     <Box h={"90%"}>
       <Flex h={"100%"} align={"center"} justify={"center"}>
         <Box
-          px={5}
+          px={{ base: 4, sm: 5 }}
           py={6}
-          w={"350px"}
+          w={{ base: "300px", sm: "350px" }}
           bg="white"
           borderRadius="md"
           shadow="base"
@@ -20,7 +20,7 @@ const SignInPage = () => {
               Sign In
             </Text>
           </VStack>
-          <Box pt={6}>
+          <Box pt={{ base: 5, sm: 6 }}>
             <SignInForm />
           </Box>
         </Box>

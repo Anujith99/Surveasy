@@ -13,20 +13,20 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 const SignInForm = () => {
   return (
     <Box>
       <form>
-        <VStack spacing={3} w={"100%"}>
+        <VStack spacing={3}>
           <FormControl>
             <InputGroup>
               <InputLeftElement
                 pointerEvents="none"
-                children={<Icon as={FaUser} color="gray.300" />}
+                children={<Icon as={FaEnvelope} color="gray.300" />}
               />
-              <Input type="text" placeholder="Email" />
+              <Input type="email" name="email" placeholder="Email" />
             </InputGroup>
           </FormControl>
           <FormControl>
@@ -35,7 +35,7 @@ const SignInForm = () => {
                 pointerEvents="none"
                 children={<Icon as={FaLock} color="gray.300" />}
               />
-              <Input type="password" placeholder="Password" />
+              <Input type="password" name="password" placeholder="Password" />
             </InputGroup>
           </FormControl>
         </VStack>
