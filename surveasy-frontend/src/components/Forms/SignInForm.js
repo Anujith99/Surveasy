@@ -17,6 +17,8 @@ import {
 
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
+import FormError from "./FormError";
+
 const SignInForm = () => {
   const {
     register,
@@ -54,11 +56,7 @@ const SignInForm = () => {
                 {...register("email", validationConfig.email)}
               />
             </InputGroup>
-            {errors.email && (
-              <Text mt={1} fontWeight={500} color="red.400">
-                {errors.email.message}
-              </Text>
-            )}
+            {errors.email && <FormError>{errors.email.message}</FormError>}
           </FormControl>
           <FormControl>
             <InputGroup>
@@ -74,9 +72,7 @@ const SignInForm = () => {
               />
             </InputGroup>
             {errors.password && (
-              <Text mt={1} fontWeight={500} color="red.400">
-                {errors.password.message}
-              </Text>
+              <FormError>{errors.password.message}</FormError>
             )}
           </FormControl>
         </VStack>

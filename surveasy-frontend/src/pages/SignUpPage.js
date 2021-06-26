@@ -1,6 +1,6 @@
 import React from "react";
 import SignUpForm from "components/Forms/SignUpForm";
-import { Box, Flex, VStack, Text, Avatar } from "@chakra-ui/react";
+import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 
 const SignUpPage = () => {
   return (
@@ -15,7 +15,6 @@ const SignUpPage = () => {
           shadow="base"
         >
           <VStack justify="center">
-            <Avatar />
             <Text fontSize={"2xl"} fontWeight={500}>
               Sign Up
             </Text>
