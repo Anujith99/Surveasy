@@ -7,6 +7,7 @@ import {
   FormControl,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Input,
   VStack,
   HStack,
@@ -14,19 +15,41 @@ import {
   Text,
   Icon,
   Link as ChakraLink,
+  useBoolean,
 } from "@chakra-ui/react";
 
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import FormError from "./FormError";
+
+const ShowPasswordIcon = ({ show }) => {
+  const icon = show ? FaEyeSlash : FaEye;
+
+  return (
+    <Button bg="transparent" _hover={{ bg: "transparent" }}>
+      <Icon as={icon} color="gray.300" _hover={{ color: "teal.400" }} />
+    </Button>
+  );
+};
 
 const SignUpForm = () => {
   const {
     register,
     handleSubmit,
     getValues,
+    watch,
     formState: { errors },
-  } = useForm({ mode: "onBlur" });
-  const onSubmit = (data) => console.log(data);
+  } = useForm();
+
+  const [showPassword, setShowPassword] = useBoolean(false);
+  const [showConfirm, setShowConfirm] = useBoolean(false);
+
+  const watchPasswords = watch(["password", "confirmPassword"]);
+
+  const onSubmit = (data) => {
+    setShowPassword.off();
+    setShowConfirm.off();
+    console.log(data);
+  };
 
   const validationConfig = {
     firstName: {
@@ -65,7 +88,10 @@ const SignUpForm = () => {
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={3}>
-          <HStack spacing={1}>
+          <HStack
+            mb={errors.firstName || errors.lastName ? -2 : "auto"}
+            spacing={1}
+          >
             <FormControl>
               <InputGroup>
                 <InputLeftElement
@@ -95,14 +121,17 @@ const SignUpForm = () => {
               </InputGroup>
             </FormControl>
           </HStack>
-          <Box w={"100%"}>
-            {errors.firstName && (
-              <FormError mt={0}>{errors.firstName.message}</FormError>
-            )}
-            {errors.lastName && (
-              <FormError>{errors.lastName.message}</FormError>
-            )}
-          </Box>
+          {errors.firstName || errors.lastName ? (
+            <Box w={"100%"}>
+              {errors.firstName && (
+                <FormError mt={0}>{errors.firstName.message}</FormError>
+              )}
+              {errors.lastName && (
+                <FormError>{errors.lastName.message}</FormError>
+              )}
+            </Box>
+          ) : null}
+
           <FormControl>
             <InputGroup>
               <InputLeftElement
@@ -126,11 +155,17 @@ const SignUpForm = () => {
                 children={<Icon as={FaLock} color="gray.300" />}
               />
               <Input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 {...register("password", validationConfig.password)}
               />
+              {watchPasswords[0] && (
+                <InputRightElement
+                  onClick={setShowPassword.toggle}
+                  children={<ShowPasswordIcon show={showPassword} />}
+                />
+              )}
             </InputGroup>
             {errors.password && (
               <FormError>{errors.password.message}</FormError>
@@ -144,7 +179,7 @@ const SignUpForm = () => {
                 children={<Icon as={FaLock} color="gray.300" />}
               />
               <Input
-                type="password"
+                type={showConfirm ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 {...register(
@@ -152,6 +187,12 @@ const SignUpForm = () => {
                   validationConfig.confirmPassword
                 )}
               />
+              {watchPasswords[1] && (
+                <InputRightElement
+                  onClick={setShowConfirm.toggle}
+                  children={<ShowPasswordIcon show={showConfirm} />}
+                />
+              )}
             </InputGroup>
             {errors.confirmPassword && (
               <FormError>{errors.confirmPassword.message}</FormError>
@@ -168,7 +209,7 @@ const SignUpForm = () => {
           Sign Up
         </Button>
       </form>
-      <Box mt={6} textAlign="center">
+      <Box mt={{ base: 3, sm: 6 }} textAlign="center">
         <Text>
           Already have an account?{" "}
           <ChakraLink as={Link} to="/signin" color="teal.500">

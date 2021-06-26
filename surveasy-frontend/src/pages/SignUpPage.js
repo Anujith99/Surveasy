@@ -4,11 +4,11 @@ import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 
 const SignUpPage = () => {
   return (
-    <Box h={"95%"}>
-      <Flex h={"100%"} align={"center"} justify={"center"}>
+    <Box h={"100%"}>
+      <Flex h={"100%"} align="center" justify={"center"}>
         <Box
           px={{ base: 4, sm: 5 }}
-          py={{ base: 5, sm: 6 }}
+          py={{ base: 4, sm: 5 }}
           w={{ base: "305px", sm: "370px" }}
           bg="white"
           borderRadius="md"
