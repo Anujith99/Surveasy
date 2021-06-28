@@ -1,9 +1,16 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 
 import loggerMiddleware from "./middlewares/loggerMiddleware.js";
+import {
+  notFoundMiddleware,
+  errorHandlingMiddleware,
+} from "./middlewares/errorMiddlewares.js";
 
 import logger from "./config/logger.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -17,6 +24,9 @@ app.use(loggerMiddleware);
 app.get("/", (req, res) => {
   res.json({ message: "This is the base route" });
 });
+
+app.use(notFoundMiddleware);
+app.use(errorHandlingMiddleware);
 
 let port = process.env.port || 5000;
 
