@@ -6,7 +6,7 @@ import { ReactComponent as Logo } from "resources/Surveasy_Logo.svg";
 const Navbar = () => {
   return (
     <Box
-      minH={"60px"}
+      minH={{ base: "20px", md: "60px" }}
       borderBottom={1}
       borderStyle={"solid"}
       borderColor={"gray.200"}
@@ -14,8 +14,8 @@ const Navbar = () => {
       <Container>
         <Flex bg={"white"} py={{ base: 3 }} align={"center"}>
           <Flex flex={{ base: 1 }} justify={"start"}>
-            <Box as={Link} to="/" mt={1}>
-              <Logo />
+            <Box as={Link} to="/" mt={1} width={{ base: "95px", md: "125px" }}>
+              <Logo width={"100%"} height={"100%"} />
             </Box>
           </Flex>
 

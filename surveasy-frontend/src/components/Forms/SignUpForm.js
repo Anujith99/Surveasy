@@ -38,7 +38,7 @@ const SignUpForm = () => {
     getValues,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onBlur", reValidateMode: "onBlur" });
 
   const [showPassword, setShowPassword] = useBoolean(false);
   const [showConfirm, setShowConfirm] = useBoolean(false);

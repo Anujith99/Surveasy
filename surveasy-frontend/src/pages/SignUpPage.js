@@ -8,7 +8,7 @@ const SignUpPage = () => {
       <Flex h={"100%"} align="center" justify={"center"}>
         <Box
           px={{ base: 4, sm: 5 }}
-          py={{ base: 4, sm: 5 }}
+          py={{ base: 3, sm: 5 }}
           w={{ base: "305px", sm: "370px" }}
           bg="white"
           borderRadius="md"

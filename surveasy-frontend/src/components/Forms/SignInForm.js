@@ -24,7 +24,7 @@ const SignInForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onBlur" });
+  } = useForm({ mode: "onBlur", reValidateMode: "onBlur" });
   const onSubmit = (data) => console.log(data);
   const validationConfig = {
     email: {
