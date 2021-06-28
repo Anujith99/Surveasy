@@ -1,6 +1,12 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  cors({ origin: process.env.ALLOWED_ORIGIN, optionsSuccessStatus: 200 })
+);
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "This is the base route" });
