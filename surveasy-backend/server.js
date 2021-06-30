@@ -11,7 +11,7 @@ import {
 } from "./middlewares/errorMiddlewares.js";
 import logger from "./config/logger.js";
 
-import userRoutes from "./routes/userRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
   res.json({ message: "This is the base route" });
 });
 
-app.use("/users", userRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlingMiddleware);
