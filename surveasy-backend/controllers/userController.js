@@ -70,4 +70,10 @@ const login = async (req, res, next) => {
   }
 };
 
-export default { register, login };
+const logout = (req, res) => {
+  res
+    .clearCookie("authToken", { path: "/dashboard" })
+    .json({ message: "Logout successful" });
+};
+
+export default { register, login, logout };
