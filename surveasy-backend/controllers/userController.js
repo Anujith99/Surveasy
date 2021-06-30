@@ -1,5 +1,10 @@
+import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import createError from "../utils/createError.js";
+
+const generateJWT = (userID) => {
+  return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: "30d" });
+};
 
 const register = async (req, res, next) => {
   try {
@@ -20,6 +25,10 @@ const register = async (req, res, next) => {
         email: newUser.email,
       };
 
+      res.cookie("authToken", generateJWT(newUser._id), {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
       res.status(201).json(response);
     }
   } catch (error) {
@@ -46,6 +55,10 @@ const login = async (req, res, next) => {
         lastName: user.lastName,
         email: user.email,
       };
+      res.cookie("authToken", generateJWT(user._id), {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
       res.json(response);
     } else {
       throw createError(400, "Incorrect Password");
