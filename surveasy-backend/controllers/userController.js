@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import createError from "../utils/createError.js";
+import logger from "../config/logger.js";
 
 const generateJWT = (userID) => {
   return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -31,6 +32,8 @@ const register = async (req, res, next) => {
         email: newUser.email,
       };
 
+      logger.info(response);
+
       res.cookie("authToken", generateJWT(newUser._id), cookieOptions);
       res.status(201).json(response);
     }
@@ -58,6 +61,8 @@ const login = async (req, res, next) => {
         lastName: user.lastName,
         email: user.email,
       };
+
+      logger.info(response);
       res.cookie("authToken", generateJWT(user._id), cookieOptions);
       res.json(response);
     } else {
@@ -69,9 +74,29 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res
-    .clearCookie("authToken", { path: "/dashboard" })
-    .json({ message: "Logout successful" });
+  try {
+    res
+      .clearCookie("authToken", { path: "/dashboard" })
+      .json({ message: "Logout successful" });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export default { register, login, logout };
+const getUser = (req, res) => {
+  try {
+    const { user } = req;
+
+    if (!user) {
+      throw createError(401, "Not authenticated");
+    }
+
+    logger.info(user);
+
+    res.json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { register, login, logout, getUser };
