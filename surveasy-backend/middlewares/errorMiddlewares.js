@@ -16,7 +16,7 @@ export const errorHandlingMiddleware = (err, req, res, next) => {
   logger.error(`${req.method}: ${req.url} ${res.statusCode} `);
   logger.error(err.stack);
 
-  res.send(errorMessage);
+  res.json(errorMessage);
 
   next();
 };
