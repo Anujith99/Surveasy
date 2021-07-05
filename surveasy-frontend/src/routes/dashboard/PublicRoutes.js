@@ -1,10 +1,10 @@
 import React from "react";
 import { Route } from "react-router-dom";
 
-import PublicLayout from "layouts/PublicLayout";
-import HomePage from "pages/Homepage";
-import SignInPage from "pages/SignInPage";
-import SignUpPage from "pages/SignUpPage";
+import PublicLayout from "layouts/dashboard/PublicLayout";
+import HomePage from "pages/dashboard/Homepage";
+import SignInPage from "pages/dashboard/SignInPage";
+import SignUpPage from "pages/dashboard/SignUpPage";
 
 const publicLayoutRoutes = [
   {
