@@ -28,6 +28,8 @@ const loginReducer = (state = initialFormState, action) => {
           draftState.errorMessage = null;
         }
         break;
+      case TYPES.USER_LOGIN_RESET:
+        return initialFormState;
       default:
         break;
     }
@@ -54,6 +56,8 @@ const registerReducer = (state = initialFormState, action) => {
           draftState.errorMessage = null;
         }
         break;
+      case TYPES.USER_REGISTER_RESET:
+        return initialFormState;
       default:
         break;
     }

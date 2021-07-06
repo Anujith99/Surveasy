@@ -23,6 +23,8 @@ import {
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import FormError from "./FormError";
 import { registerUser } from "actions/users/actions";
+import { USER_REGISTER_RESET } from "actions/users/types";
+import useClearState from "helpers/hooks/useClearState";
 
 const ShowPasswordIcon = ({ show }) => {
   const icon = show ? FaEyeSlash : FaEye;
@@ -108,6 +110,7 @@ const SignUpForm = () => {
       toast.closeAll();
     }
   }, [error, errorMessage, toast]);
+  useClearState(USER_REGISTER_RESET);
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>

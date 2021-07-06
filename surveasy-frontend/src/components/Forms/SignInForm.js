@@ -21,6 +21,8 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 
 import FormError from "./FormError";
 import { loginUser } from "actions/users/actions";
+import { USER_LOGIN_RESET } from "actions/users/types";
+import useClearState from "helpers/hooks/useClearState";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -67,6 +69,8 @@ const SignInForm = () => {
       toast.closeAll();
     }
   }, [error, errorMessage, toast]);
+
+  useClearState(USER_LOGIN_RESET);
 
   return (
     <Box>
