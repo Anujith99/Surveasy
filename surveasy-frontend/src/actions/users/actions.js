@@ -23,6 +23,27 @@ export const loginUser = (loginCredentials) => {
   };
 };
 
+export const registerUser = (userData) => {
+  return async (dispatch) => {
+    dispatch({
+      type: TYPES.USER_REGISTER_LOADING,
+    });
+
+    await API.post("/dashboard/users/register", userData)
+      .then((res) => {
+        console.log(res.data);
+        dispatch({ type: TYPES.USER_REGISTER_SUCCESS, payload: res.data });
+        history.push("/dashboard");
+      })
+      .catch((err) => {
+        dispatch({
+          type: TYPES.USER_REGISTER_FAILED,
+          payload: err.response || {},
+        });
+      });
+  };
+};
+
 export const logoutUser = () => {
   return async (dispatch) => {
     await API.post("/dashboard/users/logout").then((res) => {
