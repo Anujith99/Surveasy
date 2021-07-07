@@ -93,7 +93,13 @@ const getUser = (req, res) => {
 
     logger.info(user);
 
-    res.json({ user });
+    let userResponse = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    };
+
+    res.json({ user: userResponse });
   } catch (error) {
     next(error);
   }

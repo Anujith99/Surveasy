@@ -64,7 +64,33 @@ const registerReducer = (state = initialFormState, action) => {
   });
 };
 
+const initialUserState = {
+  loading: true,
+  userInfo: {},
+};
+
+const userInfoReducer = (state = initialUserState, action) => {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+      case TYPES.USER_LOGIN_SUCCESS:
+      case TYPES.USER_REGISTER_SUCCESS:
+        draftState.userInfo = action.payload.user;
+        break;
+      case TYPES.GET_CURRENT_USER_SUCCESS:
+        draftState.userInfo = action.payload.user;
+        draftState.loading = false;
+        break;
+      case TYPES.GET_CURRENT_USER_FAILED:
+        draftState.loading = false;
+        break;
+      default:
+        break;
+    }
+  });
+};
+
 export default combineReducers({
   login: loginReducer,
   register: registerReducer,
+  info: userInfoReducer,
 });
