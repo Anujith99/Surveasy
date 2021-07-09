@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "engines": {
+    "node": "14.x",
+    "npm": "7.8.0"
+  },
   "scripts": {
     "dev": "npm-run-all -p watch:server watch:dist",
     "watch:server": "webpack --watch --config webpack.config.js",
