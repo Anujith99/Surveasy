@@ -9,7 +9,6 @@ const generateJWT = (userID) => {
 
 const cookieOptions = {
   httpOnly: true,
-  maxAge: 30 * 24 * 60 * 60 * 1000,
   path: "/dashboard",
   sameSite: "none",
   secure: true,
@@ -35,7 +34,10 @@ const register = async (req, res, next) => {
 
       logger.info(response);
 
-      res.cookie("authToken", generateJWT(newUser._id), cookieOptions);
+      res.cookie("authToken", generateJWT(newUser._id), {
+        ...cookieOptions,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
       res.status(201).json({ user: response });
     }
   } catch (error) {
@@ -63,7 +65,10 @@ const login = async (req, res, next) => {
       };
 
       logger.info(response);
-      res.cookie("authToken", generateJWT(user._id), cookieOptions);
+      res.cookie("authToken", generateJWT(user._id), {
+        ...cookieOptions,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
       res.json({ user: response });
     } else {
       throw createError(400, "Incorrect Password");
@@ -76,7 +81,7 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
   try {
     res
-      .clearCookie("authToken", { path: "/dashboard" })
+      .clearCookie("authToken", cookieOptions)
       .json({ message: "Logout successful" });
   } catch (error) {
     next(error);
