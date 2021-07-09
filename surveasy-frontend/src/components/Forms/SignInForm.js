@@ -24,7 +24,7 @@ import { loginUser } from "actions/users/actions";
 import { USER_LOGIN_RESET } from "actions/users/types";
 import useClearState from "helpers/hooks/useClearState";
 
-const SignInForm = () => {
+const SignInForm = ({ location }) => {
   const dispatch = useDispatch();
   const { loading, error, errorMessage } = useSelector(
     (state) => state.user.login
@@ -35,8 +35,12 @@ const SignInForm = () => {
     formState: { errors },
   } = useForm({ mode: "onBlur", reValidateMode: "onBlur" });
 
+  const redirectTo = location.state ? location.state.from : "/dashboard";
+
+  console.log(location);
+
   const onSubmit = (data) => {
-    dispatch(loginUser(data));
+    dispatch(loginUser(data, redirectTo));
   };
 
   const validationConfig = {

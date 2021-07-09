@@ -2,7 +2,7 @@ import * as TYPES from "./types";
 import API from "helpers/api";
 import history from "helpers/history";
 
-export const loginUser = (loginCredentials) => {
+export const loginUser = (loginCredentials, redirectTo) => {
   return async (dispatch) => {
     dispatch({
       type: TYPES.USER_LOGIN_LOADING,
@@ -12,7 +12,7 @@ export const loginUser = (loginCredentials) => {
       .then((res) => {
         console.log(res.data);
         dispatch({ type: TYPES.USER_LOGIN_SUCCESS, payload: res.data });
-        history.push("/dashboard");
+        history.push(redirectTo);
       })
       .catch((err) => {
         dispatch({
@@ -46,13 +46,26 @@ export const registerUser = (userData) => {
 
 export const logoutUser = () => {
   return async (dispatch) => {
-    await API.post("/dashboard/users/logout").then((res) => {
-      console.log(res.data);
-      dispatch({
-        type: TYPES.USER_LOGOUT,
-      });
-      history.push("/signin");
+    dispatch({
+      type: TYPES.USER_LOGOUT_LOADING,
     });
+    await API.post("/dashboard/users/logout")
+      .then((res) => {
+        console.log(res.data);
+        setTimeout(() => {
+          dispatch({
+            type: TYPES.USER_LOGOUT_SUCCESS,
+          });
+          history.push("/signin");
+        }, 800);
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: TYPES.USER_LOGOUT_FAILED,
+          payload: "Logout Failed. Please try again.",
+        });
+      });
   };
 };
 
@@ -66,7 +79,7 @@ export const getCurrentUser = () => {
             type: TYPES.GET_CURRENT_USER_SUCCESS,
             payload: res.data,
           });
-        }, 1000);
+        }, 800);
       })
       .catch((err) => {
         setTimeout(() => {

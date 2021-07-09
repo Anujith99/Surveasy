@@ -67,6 +67,8 @@ const registerReducer = (state = initialFormState, action) => {
 const initialUserState = {
   loading: true,
   userInfo: {},
+  error: false,
+  errorMessage: null,
 };
 
 const userInfoReducer = (state = initialUserState, action) => {
@@ -82,6 +84,19 @@ const userInfoReducer = (state = initialUserState, action) => {
         break;
       case TYPES.GET_CURRENT_USER_FAILED:
         draftState.loading = false;
+        break;
+      case TYPES.USER_LOGOUT_LOADING:
+        draftState.loading = true;
+        draftState.error = false;
+        draftState.errorMessage = null;
+        break;
+      case TYPES.USER_LOGOUT_SUCCESS:
+        draftState.loading = false;
+        break;
+      case TYPES.USER_LOGOUT_FAILED:
+        draftState.loading = false;
+        draftState.error = true;
+        draftState.errorMessage = action.payload;
         break;
       default:
         break;

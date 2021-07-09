@@ -26,7 +26,6 @@ const register = async (req, res, next) => {
 
     if (newUser) {
       let response = {
-        id: newUser._id,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
@@ -35,7 +34,7 @@ const register = async (req, res, next) => {
       logger.info(response);
 
       res.cookie("authToken", generateJWT(newUser._id), cookieOptions);
-      res.status(201).json(response);
+      res.status(201).json({ user: response });
     }
   } catch (error) {
     next(error);
@@ -56,7 +55,6 @@ const login = async (req, res, next) => {
 
     if (isMatched) {
       let response = {
-        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -64,7 +62,7 @@ const login = async (req, res, next) => {
 
       logger.info(response);
       res.cookie("authToken", generateJWT(user._id), cookieOptions);
-      res.json(response);
+      res.json({ user: response });
     } else {
       throw createError(400, "Incorrect Password");
     }
