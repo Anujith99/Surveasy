@@ -11,7 +11,8 @@
     "dev": "npm-run-all -p watch:server watch:dist",
     "watch:server": "webpack --watch --config webpack.config.js",
     "watch:dist": "cross-env NODE_ENV=development nodemon ./dist/main.js",
-    "start": "node ./dist/main.js"
+    "start": "node ./dist/main.js",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
