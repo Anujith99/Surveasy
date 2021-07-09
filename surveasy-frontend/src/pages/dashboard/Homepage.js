@@ -6,7 +6,7 @@ import { ReactComponent as HeroImage } from "resources/HeroImage.svg";
 
 const Homepage = () => {
   return (
-    <Container h={{ base: "95%" }}>
+    <Container h={{ base: "100%" }}>
       <Box h={"100%"}>
         <Flex
           h={"100%"}

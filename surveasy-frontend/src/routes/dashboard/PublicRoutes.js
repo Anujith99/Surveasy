@@ -27,18 +27,20 @@ const publicLayoutRoutes = [
 const PublicRoutes = () => {
   return (
     <>
-      <PublicLayout>
-        {publicLayoutRoutes.map(
-          ({ exact, path, component: Component }, index) => (
-            <Route
-              key={index}
-              exact={exact}
-              path={path}
-              render={(props) => <Component {...props} />}
-            />
-          )
-        )}
-      </PublicLayout>
+      {publicLayoutRoutes.map(
+        ({ exact, path, component: Component }, index) => (
+          <Route
+            key={index}
+            exact={exact}
+            path={path}
+            render={(props) => (
+              <PublicLayout>
+                <Component {...props} />
+              </PublicLayout>
+            )}
+          />
+        )
+      )}
     </>
   );
 };

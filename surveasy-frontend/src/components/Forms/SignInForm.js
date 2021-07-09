@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import isEmail from "validator/lib/isEmail";
 import {
@@ -12,20 +13,36 @@ import {
   Button,
   Text,
   Icon,
+  useToast,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
 import FormError from "./FormError";
+import { loginUser } from "actions/users/actions";
+import { USER_LOGIN_RESET } from "actions/users/types";
+import useClearState from "helpers/hooks/useClearState";
 
-const SignInForm = () => {
+const SignInForm = ({ location }) => {
+  const dispatch = useDispatch();
+  const { loading, error, errorMessage } = useSelector(
+    (state) => state.user.login
+  );
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur", reValidateMode: "onBlur" });
-  const onSubmit = (data) => console.log(data);
+
+  const redirectTo = location.state ? location.state.from : "/dashboard";
+
+  console.log(location);
+
+  const onSubmit = (data) => {
+    dispatch(loginUser(data, redirectTo));
+  };
+
   const validationConfig = {
     email: {
       required: "Email is required",
@@ -39,6 +56,26 @@ const SignInForm = () => {
       },
     },
   };
+  const toast = useToast();
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Sign In Error",
+        description:
+          errorMessage ||
+          "Oops! There seems to be some issue. Please try again.",
+        status: "error",
+        duration: null,
+        isClosable: true,
+      });
+    } else {
+      toast.closeAll();
+    }
+  }, [error, errorMessage, toast]);
+
+  useClearState(USER_LOGIN_RESET);
+
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -82,6 +119,7 @@ const SignInForm = () => {
           fontSize={"lg"}
           colorScheme="teal"
           type="submit"
+          isLoading={loading}
         >
           Sign In
         </Button>

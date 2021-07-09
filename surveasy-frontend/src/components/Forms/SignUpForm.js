@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import validator from "validator";
 import {
@@ -16,10 +17,14 @@ import {
   Icon,
   Link as ChakraLink,
   useBoolean,
+  useToast,
 } from "@chakra-ui/react";
 
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import FormError from "./FormError";
+import { registerUser } from "actions/users/actions";
+import { USER_REGISTER_RESET } from "actions/users/types";
+import useClearState from "helpers/hooks/useClearState";
 
 const ShowPasswordIcon = ({ show }) => {
   const icon = show ? FaEyeSlash : FaEye;
@@ -32,6 +37,10 @@ const ShowPasswordIcon = ({ show }) => {
 };
 
 const SignUpForm = () => {
+  const dispatch = useDispatch();
+  const { loading, error, errorMessage } = useSelector(
+    (state) => state.user.register
+  );
   const {
     register,
     handleSubmit,
@@ -48,7 +57,7 @@ const SignUpForm = () => {
   const onSubmit = (data) => {
     setShowPassword.off();
     setShowConfirm.off();
-    console.log(data);
+    dispatch(registerUser(data));
   };
 
   const validationConfig = {
@@ -84,6 +93,24 @@ const SignUpForm = () => {
         "Passwords do not match",
     },
   };
+
+  const toast = useToast();
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Sign Up Error",
+        description:
+          errorMessage ||
+          "Oops! There seems to be some issue. Please try again.",
+        status: "error",
+        duration: null,
+        isClosable: true,
+      });
+    } else {
+      toast.closeAll();
+    }
+  }, [error, errorMessage, toast]);
+  useClearState(USER_REGISTER_RESET);
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -205,6 +232,7 @@ const SignUpForm = () => {
           fontSize={"lg"}
           colorScheme="teal"
           type="submit"
+          isLoading={loading}
         >
           Sign Up
         </Button>

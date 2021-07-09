@@ -2,9 +2,9 @@ import React from "react";
 import SignInForm from "components/Forms/SignInForm";
 import { Box, Flex, VStack, Text, Avatar } from "@chakra-ui/react";
 
-const SignInPage = () => {
+const SignInPage = (props) => {
   return (
-    <Box h={"90%"}>
+    <Box h={"100%"}>
       <Flex h={"100%"} align={"center"} justify={"center"}>
         <Box
           px={{ base: 4, sm: 5 }}
@@ -21,7 +21,7 @@ const SignInPage = () => {
             </Text>
           </VStack>
           <Box pt={{ base: 5, sm: 6 }}>
-            <SignInForm />
+            <SignInForm {...props} />
           </Box>
         </Box>
       </Flex>
