@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import Navbar from "components/Navbar";
 import { isEmpty } from "helpers/utils";
 
@@ -11,12 +11,12 @@ const PublicLayout = ({ children }) => {
   const isLoggedIn = () => {
     if (isEmpty(userInfo)) {
       return (
-        <>
-          <Navbar />
-          <Box bg="gray.50" h={"89vh"}>
+        <Flex direction="column" height="100%">
+          <Navbar type="public" />
+          <Box bg="gray.50" flexGrow={1}>
             {children}
           </Box>
-        </>
+        </Flex>
       );
     } else {
       return <Redirect to="/dashboard" />;
