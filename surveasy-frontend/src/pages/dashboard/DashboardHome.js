@@ -1,20 +1,37 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { Button } from "@chakra-ui/react";
-
-import { logoutUser } from "actions/users/actions";
+import Container from "components/Container";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import { FaPlus } from "react-icons/fa";
+import SurveyList from "components/SurveyList";
 
 const DashboardHome = () => {
-  const dispatch = useDispatch();
-
-  const logout = () => dispatch(logoutUser());
+  const headingSize = useBreakpointValue({ base: "lg", md: "xl" });
+  const buttonSize = useBreakpointValue({ base: "sm", md: "md" });
   return (
-    <div>
-      <h1>Dashboard Home</h1>
-      <Button mt={2} colorScheme="orange" onClick={logout}>
-        Logout
-      </Button>
-    </div>
+    <Container mt={4}>
+      <Flex align="bottom" justify="space-between">
+        <Heading color="gray.800" size={headingSize}>
+          Surveys
+        </Heading>
+        <Button
+          leftIcon={<Icon as={FaPlus} />}
+          colorScheme="teal"
+          size={buttonSize}
+        >
+          Create
+        </Button>
+      </Flex>
+      <Box mt={4}>
+        <SurveyList />
+      </Box>
+    </Container>
   );
 };
 

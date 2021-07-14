@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Flex,
@@ -15,9 +15,11 @@ import {
   MenuDivider,
 } from "@chakra-ui/react";
 import Container from "components/Container";
-import { ReactComponent as Logo } from "resources/Surveasy_Logo.svg";
 import { isEmpty } from "helpers/utils";
 import { FaSignOutAlt, FaUserAlt } from "react-icons/fa";
+
+import { ReactComponent as Logo } from "resources/Surveasy_Logo.svg";
+import { logoutUser } from "actions/users/actions";
 
 const Buttons = () => {
   return (
@@ -47,11 +49,13 @@ const Buttons = () => {
 };
 
 const UserAvatar = () => {
+  const dispatch = useDispatch();
   const avatarSize = useBreakpointValue({ base: "sm", md: "md" });
   const { userInfo } = useSelector((state) => state.user.info);
   const fullName = isEmpty(userInfo)
     ? ""
     : userInfo.firstName + " " + userInfo.lastName;
+  const logout = () => dispatch(logoutUser());
   return (
     <Menu autoSelect={false}>
       <MenuButton
@@ -80,7 +84,9 @@ const UserAvatar = () => {
         </MenuItem>
         <MenuDivider />
         <MenuItem icon={<FaUserAlt />}>Profile</MenuItem>
-        <MenuItem icon={<FaSignOutAlt />}>Sign Out</MenuItem>
+        <MenuItem onClick={logout} icon={<FaSignOutAlt />}>
+          Sign Out
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -93,6 +99,7 @@ const Navbar = ({ type }) => {
       borderBottom={1}
       borderStyle={"solid"}
       borderColor={"gray.200"}
+      bg="white"
     >
       <Container>
         <Flex bg={"white"} py={{ base: 3 }} align={"center"}>

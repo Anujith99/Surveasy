@@ -13,9 +13,7 @@ const PublicLayout = ({ children }) => {
       return (
         <Flex direction="column" height="100%">
           <Navbar type="public" />
-          <Box bg="gray.50" flexGrow={1}>
-            {children}
-          </Box>
+          <Box flexGrow={1}>{children}</Box>
         </Flex>
       );
     } else {

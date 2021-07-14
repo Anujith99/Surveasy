@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { isEmpty } from "helpers/utils";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import Navbar from "components/Navbar";
 
 const PrivateLayout = ({ children, location }) => {
@@ -17,12 +17,10 @@ const PrivateLayout = ({ children, location }) => {
       );
     } else {
       return (
-        <Flex direction="column" height="100%">
+        <>
           <Navbar type="private" />
-          <Box bg="gray.50" flexGrow={1}>
-            {children}
-          </Box>
-        </Flex>
+          <Box>{children}</Box>
+        </>
       );
     }
   };
