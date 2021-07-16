@@ -1,15 +1,15 @@
+import React from "react";
 import {
   Badge,
+  Box,
   Divider,
   Flex,
   Icon,
   Input,
   InputGroup,
   InputLeftElement,
-  Select,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
 import { FaSearch } from "react-icons/fa";
 
 const surveys = [
@@ -80,17 +80,19 @@ const SurveyList = () => {
           />
           <Input bg="white" type="text" placeholder="Search for survey" />
         </InputGroup>
-        <Select bg="white" w="max-content">
-          <option>All Surveys</option>
-          <option>Active</option>
-          <option>Inactive</option>
-        </Select>
       </Flex>
       <Divider my={{ base: 2, md: 3 }} />
-      <Flex flexDirection="column">
-        {surveys.map((survey) => (
-          <SurveyListItem key={survey._id} survey={survey} />
-        ))}
+      <Flex flexDirection="column" align="center">
+        {surveys.length === 0 ? (
+          <Box w="240px" textAlign="center" color="gray.600" mt={4}>
+            <Text fontSize="2xl">You have no surveys!</Text>
+            <Text mt={2}>Click on the 'Create' button to get started.</Text>
+          </Box>
+        ) : (
+          surveys.map((survey) => (
+            <SurveyListItem key={survey._id} survey={survey} />
+          ))
+        )}
       </Flex>
     </>
   );
