@@ -5,6 +5,6 @@ let router = express.Router();
 router.get("/", surveyController.getAllSurveys);
 router.get("/:id", surveyController.getSurveyById);
 router.post("/", surveyController.createSurvey);
+router.put("/:id", surveyController.updateSurvey);
 router.delete("/:id", surveyController.deleteSurvey);
-
 export default router;

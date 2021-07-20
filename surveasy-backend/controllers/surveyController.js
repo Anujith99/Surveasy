@@ -5,7 +5,7 @@ import logger from "../config/logger.js";
 const getAllSurveys = async (req, res, next) => {
   try {
     let userID = req.user._id;
-    let surveys = await Survey.find({ userID });
+    let surveys = await Survey.find({ userID }).sort({ updatedAt: -1 });
     logger.info(surveys);
     res.json({ surveys });
   } catch (error) {
@@ -39,6 +39,24 @@ const createSurvey = async (req, res, next) => {
   }
 };
 
+const updateSurvey = async (req, res, next) => {
+  try {
+    let survey = await Survey.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true, runValidators: true }
+    );
+
+    if (!survey) {
+      throw createError(404, "Survey with this ID does not exist.");
+    }
+
+    res.json({ survey });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteSurvey = async (req, res, next) => {
   try {
     let survey = await Survey.findByIdAndRemove(req.params.id);
@@ -53,4 +71,10 @@ const deleteSurvey = async (req, res, next) => {
   }
 };
 
-export default { getAllSurveys, createSurvey, getSurveyById, deleteSurvey };
+export default {
+  getAllSurveys,
+  createSurvey,
+  getSurveyById,
+  updateSurvey,
+  deleteSurvey,
+};

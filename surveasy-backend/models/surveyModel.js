@@ -1,35 +1,38 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-const questionSchema = mongoose.Schema({
-  questionId: {
-    type: mongoose.SchemaTypes.String,
-    required: true,
-    validate: [
-      (val) => validator.isUUID(val, v4),
-      "Question ID is not a valid UUID",
+const questionSchema = mongoose.Schema(
+  {
+    questionId: {
+      type: mongoose.SchemaTypes.String,
+      required: true,
+      validate: [
+        (val) => validator.isUUID(val, 4),
+        "Question ID is not a valid UUID",
+      ],
+    },
+    questionType: {
+      type: mongoose.SchemaTypes.String,
+      required: true,
+      enum: ["mcq", "checkbox", "dropdown", "longText", "shortText"],
+    },
+    questionTitle: {
+      type: mongoose.SchemaTypes.String,
+      required: true,
+    },
+    questionDescription: {
+      type: mongoose.SchemaTypes.String,
+    },
+    isRequired: {
+      type: mongoose.SchemaTypes.Boolean,
+      required: true,
+    },
+    options: [
+      { text: mongoose.SchemaTypes.String, value: mongoose.SchemaTypes.String },
     ],
   },
-  questionType: {
-    type: mongoose.SchemaTypes.String,
-    required: true,
-    enum: ["mcq", "checkbox", "dropdown", "longText", "shortText"],
-  },
-  questionTitle: {
-    type: mongoose.SchemaTypes.String,
-    required: true,
-  },
-  questionDescription: {
-    type: mongoose.SchemaTypes.String,
-  },
-  isRequired: {
-    type: mongoose.SchemaTypes.Boolean,
-    required: true,
-  },
-  options: [
-    { text: mongoose.SchemaTypes.String, value: mongoose.SchemaTypes.String },
-  ],
-});
+  { _id: false }
+);
 
 const surveySchema = mongoose.Schema(
   {
@@ -54,6 +57,7 @@ const surveySchema = mongoose.Schema(
     },
     respondentInfo: [
       {
+        _id: false,
         info: {
           type: mongoose.SchemaTypes.String,
           required: [true, "Object must have key of 'info'"],
