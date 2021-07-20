@@ -2,6 +2,8 @@ import React from "react";
 import { Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { isEmpty } from "helpers/utils";
+import { Box } from "@chakra-ui/react";
+import Navbar from "components/Navbar";
 
 const PrivateLayout = ({ children, location }) => {
   const { userInfo } = useSelector((state) => state.user.info);
@@ -14,7 +16,12 @@ const PrivateLayout = ({ children, location }) => {
         />
       );
     } else {
-      return <div>{children}</div>;
+      return (
+        <>
+          <Navbar type="private" />
+          <Box>{children}</Box>
+        </>
+      );
     }
   };
   return <>{isLoggedIn()}</>;
