@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./userRoutes.js";
+import surveyRoutes from "./surveyRoutes.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import logger from "../config/logger.js";
 
@@ -11,5 +12,6 @@ router.get("/", protect, (req, res) => {
 });
 
 router.use("/users", userRoutes);
+router.use("/surveys", protect, surveyRoutes);
 
 export default router;

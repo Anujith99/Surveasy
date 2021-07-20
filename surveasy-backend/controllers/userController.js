@@ -7,12 +7,14 @@ const generateJWT = (userID) => {
   return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-const cookieOptions = {
+let cookieOptions = {
   httpOnly: true,
   path: "/dashboard",
-  sameSite: "none",
-  secure: true,
 };
+
+if (process.env.NODE_ENV !== "development") {
+  cookieOptions = { ...cookieOptions, sameSite: "none", secure: true };
+}
 
 const register = async (req, res, next) => {
   try {
