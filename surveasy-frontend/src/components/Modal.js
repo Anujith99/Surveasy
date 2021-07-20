@@ -8,9 +8,9 @@ import {
   ModalBody,
 } from "@chakra-ui/react";
 
-const Modal = ({ isOpen, onClose, title, body }) => {
+const Modal = ({ isOpen, onClose, title, body, ...props }) => {
   return (
-    <ChakraModal isOpen={isOpen} onClose={onClose}>
+    <ChakraModal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>

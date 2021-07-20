@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Badge,
   Box,
@@ -22,21 +22,21 @@ const surveys = [
   },
   {
     _id: 101,
-    surveyTitle: "Android Developer Survey 2020-2021",
+    surveyTitle: "Best Cuisines Survey 2020-2021",
     surveyDescription:
       "Find out everything about web developers in the last year during COVID-19 Pandemic",
     isActive: false,
   },
   {
     _id: 102,
-    surveyTitle: "Java Developer Survey 2020-2021",
+    surveyTitle: "Most Popular Celebrities Survey 2020-2021",
     surveyDescription:
       "Find out everything about web developers in the last year during COVID-19 Pandemic",
     isActive: true,
   },
   {
     _id: 103,
-    surveyTitle: "Python Developer Survey 2020-2021",
+    surveyTitle: "Worst Travel Destinations Survey 2020-2021",
     surveyDescription:
       "Find out everything about web developers in the last year during COVID-19 Pandemic",
     isActive: true,
@@ -70,6 +70,16 @@ const SurveyListItem = ({ survey }) => {
 };
 
 const SurveyList = () => {
+  const [filteredSurveys, setFilteredSurveys] = useState(surveys);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    let results = surveys.filter(
+      (s) => s.surveyTitle.toLowerCase().indexOf(search.toLowerCase()) > -1
+    );
+
+    setFilteredSurveys(results);
+  }, [search]);
   return (
     <>
       <Flex>
@@ -78,7 +88,13 @@ const SurveyList = () => {
             pointerEvents="none"
             children={<Icon as={FaSearch} color="gray.300" />}
           />
-          <Input bg="white" type="text" placeholder="Search for survey" />
+          <Input
+            bg="white"
+            type="text"
+            placeholder="Search for survey"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </InputGroup>
       </Flex>
       <Divider my={{ base: 2, md: 3 }} />
@@ -89,7 +105,7 @@ const SurveyList = () => {
             <Text mt={2}>Click on the 'Create' button to get started.</Text>
           </Box>
         ) : (
-          surveys.map((survey) => (
+          filteredSurveys.map((survey) => (
             <SurveyListItem key={survey._id} survey={survey} />
           ))
         )}
