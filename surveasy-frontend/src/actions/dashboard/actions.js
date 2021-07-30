@@ -26,11 +26,13 @@ export const createSurvey = (surveyInfo) => {
     });
 
     API.post("/dashboard/surveys", surveyInfo)
-      .then((res) =>
+      .then((res) => {
         dispatch({
           type: TYPES.CREATE_SURVEY_SUCCESS,
-        })
-      )
+        });
+        const surveyID = res.data.survey._id;
+        history.push(`/dashboard/survey/${surveyID}`);
+      })
       .catch((err) => {
         dispatch({
           type: TYPES.CREATE_SURVEY_FAILURE,

@@ -48,8 +48,8 @@ const surveySchema = mongoose.Schema(
     },
     surveyDescription: {
       type: mongoose.SchemaTypes.String,
-      required: [true, "Survey Description is required"],
-      maxLength: [140, " should be maxium 140 characters"],
+      maxLength: [140, "Description should be maxium 140 characters"],
+      default: "",
     },
     isActive: {
       type: mongoose.SchemaTypes.Boolean,

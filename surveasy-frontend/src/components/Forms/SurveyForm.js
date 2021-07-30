@@ -42,7 +42,6 @@ const SurveyForm = ({ onSuccess }) => {
       },
     },
     surveyDescription: {
-      required: "Survey Description is required",
       maxLength: 140,
     },
   };
