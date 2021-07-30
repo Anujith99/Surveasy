@@ -9,6 +9,7 @@ const generateJWT = (userID) => {
 
 let cookieOptions;
 
+logger.info("Environment is" + process.env.NODE_ENV);
 if (process.env.NODE_ENV !== "development") {
   cookieOptions = {
     httpOnly: true,
@@ -22,6 +23,8 @@ if (process.env.NODE_ENV !== "development") {
     path: "/dashboard",
   };
 }
+logger.info("Cookie Options are ");
+logger.info(cookieOptions);
 
 const register = async (req, res, next) => {
   try {
