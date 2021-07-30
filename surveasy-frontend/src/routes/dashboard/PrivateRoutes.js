@@ -19,7 +19,7 @@ const PrivateRoutes = () => {
             exact={exact}
             path={path}
             render={(props) => (
-              <PrivateLayout>
+              <PrivateLayout {...props}>
                 <Component {...props} />
               </PrivateLayout>
             )}
