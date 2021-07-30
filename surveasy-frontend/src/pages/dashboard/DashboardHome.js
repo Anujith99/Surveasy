@@ -19,10 +19,6 @@ const DashboardHome = () => {
   const buttonSize = useBreakpointValue({ base: "sm", md: "md" });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const onCreateSubmit = (data) => {
-    onClose();
-    console.log(data);
-  };
   return (
     <>
       <Container mt={4}>
@@ -47,7 +43,7 @@ const DashboardHome = () => {
         isOpen={isOpen}
         onClose={onClose}
         title="Create Survey"
-        body={<SurveyForm onFormSubmit={onCreateSubmit} />}
+        body={<SurveyForm onSuccess={onClose} />}
       />
     </>
   );

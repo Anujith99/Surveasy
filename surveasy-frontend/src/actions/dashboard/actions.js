@@ -18,3 +18,24 @@ export const getAllSurveys = () => {
       .catch(() => dispatch({ type: TYPES.GET_ALL_SURVEYS_FAILURE }));
   };
 };
+
+export const createSurvey = (surveyInfo) => {
+  return async (dispatch) => {
+    dispatch({
+      type: TYPES.CREATE_SURVEY_LOADING,
+    });
+
+    API.post("/dashboard/surveys", surveyInfo)
+      .then((res) =>
+        dispatch({
+          type: TYPES.CREATE_SURVEY_SUCCESS,
+        })
+      )
+      .catch((err) => {
+        dispatch({
+          type: TYPES.CREATE_SURVEY_FAILURE,
+          payload: err.response || {},
+        });
+      });
+  };
+};
