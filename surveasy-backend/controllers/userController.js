@@ -7,24 +7,14 @@ const generateJWT = (userID) => {
   return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-let cookieOptions;
+let cookieOptions = {
+  httpOnly: true,
+  path: "/dashboard",
+  sameSite: "none",
+  secure: true,
+};
 
-logger.info("Environment is" + process.env.NODE_ENV);
-if (process.env.NODE_ENV !== "development") {
-  cookieOptions = {
-    httpOnly: true,
-    path: "/dashboard",
-    sameSite: "none",
-    secure: true,
-  };
-} else {
-  cookieOptions = {
-    httpOnly: true,
-    path: "/dashboard",
-  };
-}
-logger.info("Cookie Options are ");
-logger.info(cookieOptions);
+//For development remove sameSite and secure
 
 const register = async (req, res, next) => {
   try {
