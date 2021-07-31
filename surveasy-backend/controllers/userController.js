@@ -7,12 +7,20 @@ const generateJWT = (userID) => {
   return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-let cookieOptions = {
-  httpOnly: true,
-  path: "/dashboard",
-  sameSite: "none",
-  secure: true,
-};
+let cookieOptions;
+if (process.env.NODE_ENV === "development") {
+  cookieOptions = {
+    httpOnly: true,
+    path: "/dashboard",
+  };
+} else {
+  cookieOptions = {
+    httpOnly: true,
+    path: "/dashboard",
+    sameSite: "none",
+    secure: true,
+  };
+}
 
 //For development remove sameSite and secure
 
