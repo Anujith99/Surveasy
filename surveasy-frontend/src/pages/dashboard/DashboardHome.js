@@ -21,7 +21,7 @@ const DashboardHome = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Container mt={4}>
+      <Container mt={{ base: 4, md: 5 }}>
         <Flex align="bottom" justify="space-between">
           <Heading color="gray.800" size={headingSize}>
             Surveys
