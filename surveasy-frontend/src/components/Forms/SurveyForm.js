@@ -130,7 +130,7 @@ const SurveyForm = ({ onSuccess, survey, isEdit }) => {
           colorScheme="teal"
           isLoading={loading}
         >
-          Create
+          {isEdit ? "Edit" : "Create"}
         </Button>
       </form>
     </>

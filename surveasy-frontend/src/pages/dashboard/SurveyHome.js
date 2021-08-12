@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
   useBreakpointValue,
+  Collapse,
 } from "@chakra-ui/react";
 import {
   deleteSurvey,
@@ -48,6 +49,7 @@ const SurveyHome = () => {
   const [isActiveOpen, setActiveOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
+  const [showDesc, setShowDesc] = useState(false);
 
   const onActiveClose = () => setActiveOpen(false);
   const onDeleteClose = () => setDeleteOpen(false);
@@ -92,102 +94,120 @@ const SurveyHome = () => {
           </ErrorMessage>
         </Flex>
       ) : (
-        <Flex justifyContent="space-between">
-          <Heading color="gray.700" as="h3" size="lg">
-            {survey.surveyTitle}
-          </Heading>
-          <HStack spacing={1}>
-            <Button
-              colorScheme={survey.isActive ? "red" : "teal"}
-              display={{ base: "none", sm: "block" }}
-              onClick={() => setActiveOpen(true)}
-            >
-              {survey.isActive ? "Deactivate" : "Activate"}
-            </Button>
-            <Tooltip label="Preview">
+        <Flex flexDirection="column">
+          <Flex justifyContent="space-between">
+            <Heading color="gray.700" as="h3" size="lg">
+              {survey.surveyTitle}
+            </Heading>
+            <HStack spacing={1}>
               <Button
-                colorScheme="teal"
-                px={1}
-                display={{ base: "none", sm: "flex" }}
+                colorScheme={survey.isActive ? "red" : "teal"}
+                display={{ base: "none", sm: "block" }}
+                onClick={() => setActiveOpen(true)}
               >
-                <FaEye />
+                {survey.isActive ? "Deactivate" : "Activate"}
               </Button>
-            </Tooltip>
-            <Menu autoSelect={false}>
-              <MenuButton
-                as={IconButton}
-                icon={<Icon as={FaEllipsisV} />}
-                variant="ghost"
-                colorScheme="teal"
-                borderRadius={10}
-                px={1}
-              />
-              <MenuList>
-                {breakpoint === "base" ? (
+              <Tooltip label="Preview">
+                <Button
+                  colorScheme="teal"
+                  px={1}
+                  display={{ base: "none", sm: "flex" }}
+                >
+                  <FaEye />
+                </Button>
+              </Tooltip>
+              <Menu autoSelect={false}>
+                <MenuButton
+                  as={IconButton}
+                  icon={<Icon as={FaEllipsisV} />}
+                  variant="ghost"
+                  colorScheme="teal"
+                  borderRadius={10}
+                  px={1}
+                />
+                <MenuList>
+                  {breakpoint === "base" ? (
+                    <MenuItem
+                      fontWeight="semibold"
+                      backgroundColor={survey.isActive ? "red.500" : "teal.400"}
+                      color="white"
+                      onClick={() => setActiveOpen(true)}
+                    >
+                      {survey.isActive ? "Deactivate" : "Activate"} Survey
+                    </MenuItem>
+                  ) : null}
+                  {breakpoint === "base" ? (
+                    <MenuItem icon={<Icon as={FaEye} />}>Preview</MenuItem>
+                  ) : null}
+                  <MenuItem icon={<Icon as={FaLink} />}>Share Link</MenuItem>
                   <MenuItem
-                    fontWeight="semibold"
-                    backgroundColor={survey.isActive ? "red.500" : "teal.400"}
-                    color="white"
-                    onClick={() => setActiveOpen(true)}
+                    icon={<Icon as={FaPencilAlt} />}
+                    onClick={() => setEditOpen(true)}
                   >
-                    {survey.isActive ? "Deactivate" : "Activate"} Survey
+                    Edit
                   </MenuItem>
-                ) : null}
-                {breakpoint === "base" ? (
-                  <MenuItem icon={<Icon as={FaEye} />}>Preview</MenuItem>
-                ) : null}
-                <MenuItem icon={<Icon as={FaLink} />}>Share Link</MenuItem>
-                <MenuItem
-                  icon={<Icon as={FaPencilAlt} />}
-                  onClick={() => setEditOpen(true)}
-                >
-                  Edit
-                </MenuItem>
-                <MenuItem
-                  icon={<Icon as={FaTrash} />}
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  Delete
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-          <Confirm
-            isOpen={isActiveOpen}
-            onClose={onActiveClose}
-            cancelRef={cancelRef}
-            title={`Confirm ${survey.isActive ? "Deactivation" : "Activation"}`}
-            body={`Are you sure you want to ${
-              survey.isActive ? "DEACTIVATE" : "ACTIVATE"
-            } this survey?`}
-            onConfirm={handleToggleActivation}
-            confirmText={survey.isActive ? "Deactivate" : "Activate"}
-            confirmBtnColor={survey.isActive ? "red" : "teal"}
-          />
-          <Confirm
-            isOpen={isDeleteOpen}
-            onClose={onDeleteClose}
-            cancelRef={cancelRef}
-            title="Confirm Delete Survey"
-            body="Are you sure you want to delete this survey? This action cannot be undone."
-            onConfirm={handleDelete}
-            confirmText="Delete"
-            confirmBtnColor="red"
-            showToastOnConfirm={true}
-            confirmToastText="Survey Deleted Successfully"
-          />
-          <Modal
-            isOpen={isEditOpen}
-            onClose={onEditClose}
-            title="Create Survey"
-            body={
-              <SurveyForm
-                onSuccess={onEditClose}
-                isEdit={true}
-                survey={survey}
-              />
-            }
-          />
+                  <MenuItem
+                    icon={<Icon as={FaTrash} />}
+                    onClick={() => setDeleteOpen(true)}
+                  >
+                    Delete
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
+            <Confirm
+              isOpen={isActiveOpen}
+              onClose={onActiveClose}
+              cancelRef={cancelRef}
+              title={`Confirm ${
+                survey.isActive ? "Deactivation" : "Activation"
+              }`}
+              body={`Are you sure you want to ${
+                survey.isActive ? "DEACTIVATE" : "ACTIVATE"
+              } this survey?`}
+              onConfirm={handleToggleActivation}
+              confirmText={survey.isActive ? "Deactivate" : "Activate"}
+              confirmBtnColor={survey.isActive ? "red" : "teal"}
+            />
+            <Confirm
+              isOpen={isDeleteOpen}
+              onClose={onDeleteClose}
+              cancelRef={cancelRef}
+              title="Confirm Delete Survey"
+              body="Are you sure you want to delete this survey? This action cannot be undone."
+              onConfirm={handleDelete}
+              confirmText="Delete"
+              confirmBtnColor="red"
+              showToastOnConfirm={true}
+              confirmToastText="Survey Deleted Successfully"
+            />
+            <Modal
+              isOpen={isEditOpen}
+              onClose={onEditClose}
+              title="Edit Survey"
+              body={
+                <SurveyForm
+                  onSuccess={onEditClose}
+                  isEdit={true}
+                  survey={survey}
+                />
+              }
+            />
+          </Flex>
+          {survey.surveyDescription && survey.surveyDescription.length !== 0 ? (
+            <Flex flexDirection="column">
+              <Collapse in={showDesc}>{survey.surveyDescription}</Collapse>
+              <Text
+                size="lg"
+                color="teal.500"
+                cursor="pointer"
+                onClick={() => setShowDesc(!showDesc)}
+                _hover={{ color: "teal.400" }}
+              >
+                {showDesc ? "Hide" : "Show"} Description
+              </Text>
+            </Flex>
+          ) : null}
         </Flex>
       )}
     </Container>
