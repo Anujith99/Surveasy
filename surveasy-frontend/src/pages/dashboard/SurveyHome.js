@@ -33,6 +33,8 @@ import {
 } from "react-icons/fa";
 import ErrorMessage from "components/ErrorMessage";
 import Confirm from "components/Confirm";
+import Modal from "components/Modal";
+import SurveyForm from "components/Forms/SurveyForm";
 
 const SurveyHome = () => {
   const { id } = useParams();
@@ -45,9 +47,11 @@ const SurveyHome = () => {
   const cancelRef = React.createRef();
   const [isActiveOpen, setActiveOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
 
   const onActiveClose = () => setActiveOpen(false);
   const onDeleteClose = () => setDeleteOpen(false);
+  const onEditClose = () => setEditOpen(false);
 
   const handleToggleActivation = () => {
     dispatch(toggleActivation(id, { isActive: !survey.isActive }));
@@ -133,7 +137,12 @@ const SurveyHome = () => {
                   <MenuItem icon={<Icon as={FaEye} />}>Preview</MenuItem>
                 ) : null}
                 <MenuItem icon={<Icon as={FaLink} />}>Share Link</MenuItem>
-                <MenuItem icon={<Icon as={FaPencilAlt} />}>Edit</MenuItem>
+                <MenuItem
+                  icon={<Icon as={FaPencilAlt} />}
+                  onClick={() => setEditOpen(true)}
+                >
+                  Edit
+                </MenuItem>
                 <MenuItem
                   icon={<Icon as={FaTrash} />}
                   onClick={() => setDeleteOpen(true)}
@@ -166,6 +175,18 @@ const SurveyHome = () => {
             confirmBtnColor="red"
             showToastOnConfirm={true}
             confirmToastText="Survey Deleted Successfully"
+          />
+          <Modal
+            isOpen={isEditOpen}
+            onClose={onEditClose}
+            title="Create Survey"
+            body={
+              <SurveyForm
+                onSuccess={onEditClose}
+                isEdit={true}
+                survey={survey}
+              />
+            }
           />
         </Flex>
       )}

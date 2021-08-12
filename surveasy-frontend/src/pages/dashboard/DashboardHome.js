@@ -43,7 +43,7 @@ const DashboardHome = () => {
         isOpen={isOpen}
         onClose={onClose}
         title="Create Survey"
-        body={<SurveyForm onSuccess={onClose} />}
+        body={<SurveyForm onSuccess={onClose} isEdit={false} />}
       />
     </>
   );

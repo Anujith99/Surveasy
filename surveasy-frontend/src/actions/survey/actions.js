@@ -50,6 +50,28 @@ export const toggleActivation = (id, data) => {
   };
 };
 
+export const editSurvey = (id, data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: TYPES.SURVEY_FORM_LOADING,
+    });
+
+    API.put(`/dashboard/surveys/${id}`, data)
+      .then((res) => {
+        dispatch({
+          type: TYPES.SURVEY_FORM_SUCCESS,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: TYPES.SURVEY_FORM_FAILURE,
+          payload: err.response || {},
+        });
+      });
+  };
+};
+
 export const deleteSurvey = (id) => {
   return async (dispatch) => {
     dispatch({
@@ -70,6 +92,30 @@ export const deleteSurvey = (id) => {
       .catch((err) => {
         dispatch({
           type: TYPES.SURVEY_CONFIRM_FAILURE,
+          payload: err.response || {},
+        });
+      });
+  };
+};
+
+export const createSurvey = (surveyInfo) => {
+  return async (dispatch) => {
+    dispatch({
+      type: TYPES.SURVEY_FORM_LOADING,
+    });
+
+    API.post("/dashboard/surveys", surveyInfo)
+      .then((res) => {
+        dispatch({
+          type: TYPES.SURVEY_FORM_SUCCESS,
+          payload: res.data,
+        });
+        const surveyID = res.data.survey._id;
+        history.push(`/dashboard/survey/${surveyID}`);
+      })
+      .catch((err) => {
+        dispatch({
+          type: TYPES.SURVEY_FORM_FAILURE,
           payload: err.response || {},
         });
       });

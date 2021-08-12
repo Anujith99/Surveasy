@@ -10,20 +10,23 @@ import {
   Textarea,
   VStack,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 import FormError from "./FormError";
-import { createSurvey } from "actions/dashboard/actions";
+import { createSurvey, editSurvey } from "actions/survey/actions";
 import useClearState from "helpers/hooks/useClearState";
-import { CREATE_SURVEY_RESET } from "actions/dashboard/types";
+import { SURVEY_FORM_RESET } from "actions/survey/types";
+import ErrorMessage from "components/ErrorMessage";
 
-const SurveyForm = ({ onSuccess }) => {
+const SurveyForm = ({ onSuccess, survey, isEdit }) => {
   const dispatch = useDispatch();
   const { loading, error, errorMessage, success } = useSelector(
-    (state) => state.dashboard.createSurvey
+    (state) => state.survey.surveyForm
   );
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
@@ -31,7 +34,9 @@ const SurveyForm = ({ onSuccess }) => {
   });
 
   const onSubmit = (data) => {
-    dispatch(createSurvey(data));
+    return isEdit
+      ? dispatch(editSurvey(survey._id, data))
+      : dispatch(createSurvey(data));
   };
   const validationConfig = {
     surveyTitle: {
@@ -45,36 +50,30 @@ const SurveyForm = ({ onSuccess }) => {
       maxLength: 140,
     },
   };
+
   useEffect(() => {
-    if (success) {
-      onSuccess();
+    if (isEdit) {
+      const fields = ["surveyTitle", "surveyDescription"];
+      fields.map((field) => setValue(field, survey[field]));
     }
-  }, [success, onSuccess]);
+  }, [isEdit, setValue, survey]);
 
   const toast = useToast();
 
   useEffect(() => {
-    if (error) {
+    if (success) {
       toast({
-        title: "Create Survey Error",
-        description:
-          errorMessage || "Oops! Could not create survey. Please try again.",
-        status: "error",
-        duration: null,
+        title: "Success",
+        description: `Survey ${isEdit ? "updated" : "created"} successfully!`,
+        status: "success",
+        duration: 3000,
         isClosable: true,
       });
-    } else {
-      toast.closeAll();
+      onSuccess();
     }
-  }, [error, errorMessage, toast]);
+  }, [success, onSuccess, toast, isEdit]);
 
-  useEffect(() => {
-    return () => {
-      toast.closeAll();
-    };
-  }, [toast]);
-
-  useClearState(CREATE_SURVEY_RESET);
+  useClearState(SURVEY_FORM_RESET);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -116,6 +115,14 @@ const SurveyForm = ({ onSuccess }) => {
             </FormHelperText>
           </FormControl>
         </VStack>
+        {error && (
+          <Box mt={1}>
+            <ErrorMessage>
+              {errorMessage ||
+                "Oops! Could not perform action. Please try again"}
+            </ErrorMessage>
+          </Box>
+        )}
         <Button
           type="submit"
           float="right"
