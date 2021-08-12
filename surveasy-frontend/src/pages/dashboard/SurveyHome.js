@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "components/Container";
@@ -18,7 +18,11 @@ import {
   MenuItem,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { getSurveyById } from "actions/survey/actions";
+import {
+  deleteSurvey,
+  getSurveyById,
+  toggleActivation,
+} from "actions/survey/actions";
 import {
   FaArrowLeft,
   FaEllipsisV,
@@ -28,6 +32,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import ErrorMessage from "components/ErrorMessage";
+import Confirm from "components/Confirm";
 
 const SurveyHome = () => {
   const { id } = useParams();
@@ -36,6 +41,20 @@ const SurveyHome = () => {
     (state) => state.survey.surveyHome
   );
   const breakpoint = useBreakpointValue({ base: "base", sm: "sm" });
+
+  const cancelRef = React.createRef();
+  const [isActiveOpen, setActiveOpen] = useState(false);
+  const [isDeleteOpen, setDeleteOpen] = useState(false);
+
+  const onActiveClose = () => setActiveOpen(false);
+  const onDeleteClose = () => setDeleteOpen(false);
+
+  const handleToggleActivation = () => {
+    dispatch(toggleActivation(id, { isActive: !survey.isActive }));
+  };
+  const handleDelete = () => {
+    dispatch(deleteSurvey(id));
+  };
 
   useEffect(() => {
     dispatch(getSurveyById(id));
@@ -77,6 +96,7 @@ const SurveyHome = () => {
             <Button
               colorScheme={survey.isActive ? "red" : "teal"}
               display={{ base: "none", sm: "block" }}
+              onClick={() => setActiveOpen(true)}
             >
               {survey.isActive ? "Deactivate" : "Activate"}
             </Button>
@@ -104,6 +124,7 @@ const SurveyHome = () => {
                     fontWeight="semibold"
                     backgroundColor={survey.isActive ? "red.500" : "teal.400"}
                     color="white"
+                    onClick={() => setActiveOpen(true)}
                   >
                     {survey.isActive ? "Deactivate" : "Activate"} Survey
                   </MenuItem>
@@ -113,10 +134,39 @@ const SurveyHome = () => {
                 ) : null}
                 <MenuItem icon={<Icon as={FaLink} />}>Share Link</MenuItem>
                 <MenuItem icon={<Icon as={FaPencilAlt} />}>Edit</MenuItem>
-                <MenuItem icon={<Icon as={FaTrash} />}>Delete</MenuItem>
+                <MenuItem
+                  icon={<Icon as={FaTrash} />}
+                  onClick={() => setDeleteOpen(true)}
+                >
+                  Delete
+                </MenuItem>
               </MenuList>
             </Menu>
           </HStack>
+          <Confirm
+            isOpen={isActiveOpen}
+            onClose={onActiveClose}
+            cancelRef={cancelRef}
+            title={`Confirm ${survey.isActive ? "Deactivation" : "Activation"}`}
+            body={`Are you sure you want to ${
+              survey.isActive ? "DEACTIVATE" : "ACTIVATE"
+            } this survey?`}
+            onConfirm={handleToggleActivation}
+            confirmText={survey.isActive ? "Deactivate" : "Activate"}
+            confirmBtnColor={survey.isActive ? "red" : "teal"}
+          />
+          <Confirm
+            isOpen={isDeleteOpen}
+            onClose={onDeleteClose}
+            cancelRef={cancelRef}
+            title="Confirm Delete Survey"
+            body="Are you sure you want to delete this survey? This action cannot be undone."
+            onConfirm={handleDelete}
+            confirmText="Delete"
+            confirmBtnColor="red"
+            showToastOnConfirm={true}
+            confirmToastText="Survey Deleted Successfully"
+          />
         </Flex>
       )}
     </Container>

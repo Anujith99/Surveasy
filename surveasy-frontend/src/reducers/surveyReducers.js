@@ -35,6 +35,42 @@ const surveyHomeReducer = (state = initialSurveyState, action) => {
   });
 };
 
+const initialConfirmState = {
+  loading: false,
+  success: false,
+  error: false,
+  errorMessage: null,
+};
+
+const surveyConfirmReducer = (state = initialConfirmState, action) => {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+      case TYPES.SURVEY_CONFIRM_LOADING:
+        draftState.loading = true;
+        draftState.error = false;
+        break;
+      case TYPES.SURVEY_CONFIRM_SUCCESS:
+        draftState.loading = false;
+        draftState.success = true;
+        break;
+      case TYPES.SURVEY_CONFIRM_FAILURE:
+        draftState.loading = false;
+        draftState.error = true;
+        if (action.payload.data) {
+          draftState.errorMessage = action.payload.data.message;
+        } else {
+          draftState.errorMessage = null;
+        }
+        break;
+      case TYPES.SURVEY_CONFIRM_RESET:
+        return initialConfirmState;
+      default:
+        break;
+    }
+  });
+};
+
 export default combineReducers({
   surveyHome: surveyHomeReducer,
+  confirm: surveyConfirmReducer,
 });
