@@ -1,4 +1,5 @@
 import * as TYPES from "actions/dashboard/types";
+import { DELETE_SURVEY } from "actions/survey/types";
 import { produce } from "immer";
 import { combineReducers } from "redux";
 
@@ -23,41 +24,11 @@ const dashboardHomeReducer = (state = initialDashboardState, action) => {
         draftState.loading = false;
         draftState.error = true;
         break;
-      default:
+      case DELETE_SURVEY:
+        draftState.surveys = draftState.surveys.filter(
+          (s) => s._id !== action.payload
+        );
         break;
-    }
-  });
-};
-
-const initialCreateSurveyState = {
-  loading: false,
-  success: false,
-  error: false,
-  errorMessage: "",
-};
-
-const createSurveyReducer = (state = initialCreateSurveyState, action) => {
-  return produce(state, (draftState) => {
-    switch (action.type) {
-      case TYPES.CREATE_SURVEY_LOADING:
-        draftState.loading = true;
-        draftState.error = false;
-        break;
-      case TYPES.CREATE_SURVEY_SUCCESS:
-        draftState.loading = false;
-        draftState.success = true;
-        break;
-      case TYPES.CREATE_SURVEY_FAILURE:
-        draftState.loading = false;
-        draftState.error = true;
-        if (action.payload.data) {
-          draftState.errorMessage = action.payload.data.message;
-        } else {
-          draftState.errorMessage = null;
-        }
-        break;
-      case TYPES.CREATE_SURVEY_RESET:
-        return initialCreateSurveyState;
       default:
         break;
     }
@@ -66,5 +37,4 @@ const createSurveyReducer = (state = initialCreateSurveyState, action) => {
 
 export default combineReducers({
   home: dashboardHomeReducer,
-  createSurvey: createSurveyReducer,
 });

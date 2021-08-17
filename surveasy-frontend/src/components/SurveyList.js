@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Badge,
@@ -16,37 +17,6 @@ import { FaSearch } from "react-icons/fa";
 import { getAllSurveys } from "actions/dashboard/actions";
 import ErrorMessage from "./ErrorMessage";
 
-// const surveys = [
-//   {
-//     _id: 100,
-//     surveyTitle: "Web Developer Survey 2020-2021",
-//     surveyDescription:
-//       "Find out everything about web developers in the last year during COVID-19 Pandemic",
-//     isActive: true,
-//   },
-//   {
-//     _id: 101,
-//     surveyTitle: "Best Cuisines Survey 2020-2021",
-//     surveyDescription:
-//       "Find out everything about web developers in the last year during COVID-19 Pandemic",
-//     isActive: false,
-//   },
-//   {
-//     _id: 102,
-//     surveyTitle: "Most Popular Celebrities Survey 2020-2021",
-//     surveyDescription:
-//       "Find out everything about web developers in the last year during COVID-19 Pandemic",
-//     isActive: true,
-//   },
-//   {
-//     _id: 103,
-//     surveyTitle: "Worst Travel Destinations Survey 2020-2021",
-//     surveyDescription:
-//       "Find out everything about web developers in the last year during COVID-19 Pandemic",
-//     isActive: true,
-//   },
-// ];
-
 const SurveyListItem = ({ survey }) => {
   return (
     <Flex
@@ -61,11 +31,19 @@ const SurveyListItem = ({ survey }) => {
       justify="space-between"
       _first={{ mt: 0 }}
       _last={{ mb: 0 }}
-      cursor="pointer"
     >
-      <Text color="gray.800" fontSize="lg" fontWeight="semibold">
-        {survey.surveyTitle}
-      </Text>
+      <Link to={`/dashboard/survey/${survey._id}`}>
+        <Text
+          color="gray.800"
+          fontSize="lg"
+          fontWeight="semibold"
+          _hover={{ color: "teal.400" }}
+          p={1}
+          pr={2}
+        >
+          {survey.surveyTitle}
+        </Text>
+      </Link>
       <Badge fontSize="md" colorScheme={survey.isActive ? "green" : "gray"}>
         {survey.isActive ? "Active" : "Inactive"}
       </Badge>
