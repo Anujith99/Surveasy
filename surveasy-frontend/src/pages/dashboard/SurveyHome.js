@@ -162,32 +162,37 @@ const SurveyHome = () => {
                 </MenuList>
               </Menu>
             </HStack>
-            <Confirm
-              isOpen={isActiveOpen}
-              onClose={onActiveClose}
-              cancelRef={cancelRef}
-              title={`Confirm ${
-                survey.isActive ? "Deactivation" : "Activation"
-              }`}
-              body={`Are you sure you want to ${
-                survey.isActive ? "DEACTIVATE" : "ACTIVATE"
-              } this survey?`}
-              onConfirm={handleToggleActivation}
-              confirmText={survey.isActive ? "Deactivate" : "Activate"}
-              confirmBtnColor={survey.isActive ? "red" : "teal"}
-            />
-            <Confirm
-              isOpen={isDeleteOpen}
-              onClose={onDeleteClose}
-              cancelRef={cancelRef}
-              title="Confirm Delete Survey"
-              body="Are you sure you want to delete this survey? This action cannot be undone."
-              onConfirm={handleDelete}
-              confirmText="Delete"
-              confirmBtnColor="red"
-              showToastOnConfirm={true}
-              confirmToastText="Survey Deleted Successfully"
-            />
+            {isActiveOpen && (
+              <Confirm
+                isOpen={isActiveOpen}
+                onClose={onActiveClose}
+                cancelRef={cancelRef}
+                title={`Confirm ${
+                  survey.isActive ? "Deactivation" : "Activation"
+                }`}
+                body={`Are you sure you want to ${
+                  survey.isActive ? "DEACTIVATE" : "ACTIVATE"
+                } this survey?`}
+                onConfirm={handleToggleActivation}
+                confirmText={survey.isActive ? "Deactivate" : "Activate"}
+                confirmBtnColor={survey.isActive ? "red" : "teal"}
+                showToastOnConfirm={false}
+              />
+            )}
+            {isDeleteOpen && (
+              <Confirm
+                isOpen={isDeleteOpen}
+                onClose={onDeleteClose}
+                cancelRef={cancelRef}
+                title="Confirm Delete Survey"
+                body="Are you sure you want to delete this survey? This action cannot be undone."
+                onConfirm={handleDelete}
+                confirmText="Delete"
+                confirmBtnColor="red"
+                showToastOnConfirm={true}
+                confirmToastText="Survey Deleted Successfully"
+              />
+            )}
             <Modal
               isOpen={isEditOpen}
               onClose={onEditClose}
