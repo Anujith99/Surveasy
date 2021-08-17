@@ -18,6 +18,11 @@ import {
   MenuItem,
   useBreakpointValue,
   Collapse,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
 import {
   deleteSurvey,
@@ -36,6 +41,8 @@ import ErrorMessage from "components/ErrorMessage";
 import Confirm from "components/Confirm";
 import Modal from "components/Modal";
 import SurveyForm from "components/Forms/SurveyForm";
+import QuestionsList from "components/QuestionsList";
+import Responses from "components/Responses";
 
 const SurveyHome = () => {
   const { id } = useParams();
@@ -208,6 +215,20 @@ const SurveyHome = () => {
               </Text>
             </Flex>
           ) : null}
+          <Tabs isFitted isLazy variant="line" mt={2} colorScheme="teal">
+            <TabList>
+              <Tab>Questions</Tab>
+              <Tab>Responses</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <QuestionsList />
+              </TabPanel>
+              <TabPanel>
+                <Responses />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Flex>
       )}
     </Container>
