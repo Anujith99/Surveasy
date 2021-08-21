@@ -28,7 +28,11 @@ const questionSchema = mongoose.Schema(
       required: true,
     },
     options: [
-      { text: mongoose.SchemaTypes.String, value: mongoose.SchemaTypes.String },
+      {
+        id: mongoose.SchemaTypes.String,
+        text: mongoose.SchemaTypes.String,
+        value: mongoose.SchemaTypes.String,
+      },
     ],
   },
   { _id: false }

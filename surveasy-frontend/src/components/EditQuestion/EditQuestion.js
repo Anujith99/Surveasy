@@ -15,6 +15,9 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import { FaRegCopy, FaGripVertical, FaTrash } from "react-icons/fa";
+import EditShortAnswer from "./EditShortAnswer";
+import EditParagraph from "./EditParagraph";
+import EditOptions from "./EditOptions";
 
 const EditQuestion = () => {
   const questionItem = {
@@ -23,6 +26,7 @@ const EditQuestion = () => {
     questionTitle: "",
     questionDescription: "",
     isRequired: false,
+    options: [],
   };
 
   const [question, setQuestion] = useState(questionItem);
@@ -35,6 +39,28 @@ const EditQuestion = () => {
   };
   const handleToggle = () =>
     setQuestion({ ...question, isRequired: !question.isRequired });
+
+  const handleOptionsChange = (options) =>
+    setQuestion({ ...question, options });
+
+  const renderQuestionType = () => {
+    const type = question.questionType;
+
+    switch (type) {
+      case "mcq":
+      case "dropdown":
+      case "checkbox":
+        return (
+          <EditOptions question={question} onChange={handleOptionsChange} />
+        );
+      case "shortText":
+        return <EditShortAnswer />;
+      case "longText":
+        return <EditParagraph />;
+      default:
+        return null;
+    }
+  };
   //   useEffect(() => {
   //     console.log(question);
   //   }, [question]);
@@ -79,7 +105,7 @@ const EditQuestion = () => {
                 <option value="longText">Paragraph</option>
               </Select>
             </Flex>
-            <Flex flexDir="column" mt={1}>
+            <Flex flexDir="column" mt={2}>
               <Text
                 size="lg"
                 color="teal.500"
@@ -100,8 +126,8 @@ const EditQuestion = () => {
               </Collapse>
             </Flex>
             <Divider marginY={1} />
-            <Divider marginY={1} />
-            <Flex justifyContent="flex-end">
+            {renderQuestionType()}
+            <Flex mt={1} justifyContent="flex-end">
               <HStack>
                 <Tooltip label="Duplicate">
                   <Button colorScheme="teal" variant="ghost" px={1}>
