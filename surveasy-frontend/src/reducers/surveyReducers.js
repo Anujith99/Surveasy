@@ -21,6 +21,7 @@ const surveyHomeReducer = (state = initialSurveyState, action) => {
         draftState.survey = action.payload.survey;
         break;
       case TYPES.SURVEY_FORM_SUCCESS:
+      case TYPES.UPDATE_SURVEY:
         draftState.survey = action.payload.survey;
         break;
       case TYPES.GET_SURVEY_FAILURE:

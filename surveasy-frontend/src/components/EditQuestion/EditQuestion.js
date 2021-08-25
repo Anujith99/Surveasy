@@ -18,19 +18,24 @@ import { FaRegCopy, FaGripVertical, FaTrash } from "react-icons/fa";
 import EditShortAnswer from "./EditShortAnswer";
 import EditParagraph from "./EditParagraph";
 import EditOptions from "./EditOptions";
+import Confirm from "components/Confirm";
 
-const EditQuestion = () => {
-  const questionItem = {
-    questionId: "saff2409r3j4f3f",
-    questionType: "mcq",
-    questionTitle: "",
-    questionDescription: "",
-    isRequired: false,
-    options: [],
-  };
-
+const EditQuestion = ({
+  questionItem,
+  deleteQuestion,
+  duplicateQuestion,
+  handleQuestionChange,
+}) => {
   const [question, setQuestion] = useState(questionItem);
   const [showDesc, setShowDesc] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const cancelRef = React.createRef();
+
+  const onConfirmClose = () => setShowConfirm(false);
+  const handleDelete = () => {
+    setShowConfirm(false);
+    deleteQuestion(questionItem.questionId);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,11 +66,12 @@ const EditQuestion = () => {
         return null;
     }
   };
-  //   useEffect(() => {
-  //     console.log(question);
-  //   }, [question]);
+  useEffect(() => {
+    handleQuestionChange(question.questionId, question);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [question]);
   return (
-    <Container mode="card" p={0}>
+    <Container mode="card" p={0} mb={3}>
       <Flex
         dir="column"
         w={"100%"}
@@ -97,6 +103,7 @@ const EditQuestion = () => {
                 ml={{ base: 0, sm: 2 }}
                 mt={{ base: 1, sm: 0 }}
                 onChange={handleChange}
+                value={question.questionType}
               >
                 <option value="mcq">Multiple Choice</option>
                 <option value="checkbox">Checkboxes</option>
@@ -130,12 +137,22 @@ const EditQuestion = () => {
             <Flex mt={1} justifyContent="flex-end">
               <HStack>
                 <Tooltip label="Duplicate">
-                  <Button colorScheme="teal" variant="ghost" px={1}>
+                  <Button
+                    colorScheme="teal"
+                    variant="ghost"
+                    px={1}
+                    onClick={() => duplicateQuestion(questionItem.questionId)}
+                  >
                     <Icon as={FaRegCopy} w={5} h={5} />
                   </Button>
                 </Tooltip>
                 <Tooltip label="Delete">
-                  <Button colorScheme="red" variant="ghost" px={1}>
+                  <Button
+                    colorScheme="red"
+                    variant="ghost"
+                    px={1}
+                    onClick={() => setShowConfirm(true)}
+                  >
                     <Icon as={FaTrash} w={5} h={5} />
                   </Button>
                 </Tooltip>
@@ -155,6 +172,18 @@ const EditQuestion = () => {
             </Flex>
           </Flex>
         </Flex>
+        {showConfirm && (
+          <Confirm
+            isOpen={showConfirm}
+            onClose={onConfirmClose}
+            cancelRef={cancelRef}
+            title="Confirm Delete Question"
+            body="Are you sure you want to delete this question?"
+            onConfirm={handleDelete}
+            confirmText="Delete"
+            confirmBtnColor="red"
+          />
+        )}
       </Flex>
     </Container>
   );

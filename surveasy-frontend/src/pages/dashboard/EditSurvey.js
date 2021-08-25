@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Flex, Icon, Text, Spinner } from "@chakra-ui/react";
+import { Flex, Icon, Text, Spinner, Button } from "@chakra-ui/react";
 import Container from "components/Container";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaSave } from "react-icons/fa";
+import { v4 as uuidv4 } from "uuid";
+import { animateScroll as Scroll } from "react-scroll";
+
 import { isEmpty } from "helpers/utils";
-import { getSurveyById } from "actions/survey/actions";
+import { getSurveyById, updateSurvey } from "actions/survey/actions";
 import ErrorMessage from "components/ErrorMessage";
 import EditQuestion from "components/EditQuestion/EditQuestion";
 
@@ -22,6 +25,57 @@ const EditSurvey = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleSurveyUpdate = (key, updatedData) => {
+    dispatch(updateSurvey({ ...survey, [key]: updatedData }));
+  };
+
+  const addQuestion = () => {
+    const newQuestion = {
+      questionId: uuidv4(),
+      questionType: "mcq",
+      questionTitle: "",
+      questionDescription: "",
+      isRequired: false,
+      options: [],
+    };
+    handleSurveyUpdate("surveyQuestions", [
+      ...survey.surveyQuestions,
+      newQuestion,
+    ]);
+    Scroll.scrollToBottom();
+  };
+
+  const deleteQuestion = (questionId) => {
+    const updatedQuestions = survey.surveyQuestions.filter(
+      (q) => q.questionId !== questionId
+    );
+    handleSurveyUpdate("surveyQuestions", updatedQuestions);
+  };
+
+  const duplicateQuestion = (questionId) => {
+    let updatedQuestions = [...survey.surveyQuestions];
+    const questionIndex = updatedQuestions.findIndex(
+      (q) => q.questionId === questionId
+    );
+    const duplicateQuestion = {
+      ...updatedQuestions[questionIndex],
+      questionId: uuidv4(),
+    };
+    console.log(questionIndex);
+    console.log(duplicateQuestion);
+    updatedQuestions.splice(questionIndex + 1, 0, duplicateQuestion);
+    handleSurveyUpdate("surveyQuestions", updatedQuestions);
+  };
+
+  const handleQuestionChange = (id, updatedQuestion) => {
+    let updatedQuestions = [...survey.surveyQuestions];
+    const questionIndex = updatedQuestions.findIndex(
+      (q) => q.questionId === id
+    );
+    updatedQuestions[questionIndex] = updatedQuestion;
+    handleSurveyUpdate("surveyQuestions", updatedQuestions);
+  };
 
   return (
     <Container mt={2}>
@@ -53,9 +107,72 @@ const EditSurvey = () => {
         </Flex>
       ) : (
         <Flex flexDirection="column">
-          <Flex>
-            <EditQuestion />
-          </Flex>
+          <Container
+            mt={2}
+            p={0}
+            sx={{ postition: "-webkit-sticky", position: "sticky", top: "1" }}
+            zIndex={10}
+          >
+            <Flex bg="white" shadow="sm" p={2} mb={3} justify="space-between">
+              <Flex alignItems="center">
+                <Button
+                  variant="ghost"
+                  colorScheme="teal"
+                  px={1}
+                  display={{ base: "block", sm: "none" }}
+                  onClick={addQuestion}
+                >
+                  <Icon as={FaPlus} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  colorScheme="teal"
+                  leftIcon={<Icon as={FaPlus} />}
+                  display={{ base: "none", sm: "block" }}
+                  onClick={addQuestion}
+                >
+                  Add
+                </Button>
+              </Flex>
+              <Flex alignItems="center">
+                <Text
+                  mr={3}
+                  color="teal.500"
+                  _hover={{ color: "teal.600" }}
+                  fontWeight="semibold"
+                  textDecoration="underline"
+                  fontSize={{ base: "sm", sm: "initial" }}
+                >
+                  Last edit was seconds ago
+                </Text>
+                <Button
+                  colorScheme="teal"
+                  px={1}
+                  pt={0}
+                  display={{ base: "block", sm: "none" }}
+                >
+                  <Icon as={FaSave} />
+                </Button>
+                <Button
+                  colorScheme="teal"
+                  leftIcon={<Icon as={FaSave} />}
+                  display={{ base: "none", sm: "block" }}
+                >
+                  Save
+                </Button>
+              </Flex>
+            </Flex>
+          </Container>
+          {survey.surveyQuestions &&
+            survey.surveyQuestions.map((question) => (
+              <EditQuestion
+                key={question.questionId}
+                questionItem={question}
+                handleQuestionChange={handleQuestionChange}
+                deleteQuestion={deleteQuestion}
+                duplicateQuestion={duplicateQuestion}
+              />
+            ))}
         </Flex>
       )}
     </Container>
