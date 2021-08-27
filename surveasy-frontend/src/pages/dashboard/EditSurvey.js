@@ -6,6 +6,7 @@ import Container from "components/Container";
 import { FaArrowLeft, FaPlus, FaSave } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import { animateScroll as Scroll } from "react-scroll";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import { isEmpty } from "helpers/utils";
 import { getSurveyById, updateSurvey } from "actions/survey/actions";
@@ -62,8 +63,6 @@ const EditSurvey = () => {
       ...updatedQuestions[questionIndex],
       questionId: uuidv4(),
     };
-    console.log(questionIndex);
-    console.log(duplicateQuestion);
     updatedQuestions.splice(questionIndex + 1, 0, duplicateQuestion);
     handleSurveyUpdate("surveyQuestions", updatedQuestions);
   };
@@ -75,6 +74,30 @@ const EditSurvey = () => {
     );
     updatedQuestions[questionIndex] = updatedQuestion;
     handleSurveyUpdate("surveyQuestions", updatedQuestions);
+  };
+
+  const handleDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    let updatedQuestions = [...survey.surveyQuestions];
+    let draggedQuestion = updatedQuestions.find(
+      (q) => q.questionId === draggableId
+    );
+    if (draggedQuestion) {
+      updatedQuestions.splice(source.index, 1);
+      updatedQuestions.splice(destination.index, 0, draggedQuestion);
+      handleSurveyUpdate("surveyQuestions", updatedQuestions);
+    } else {
+      return;
+    }
   };
 
   return (
@@ -163,16 +186,31 @@ const EditSurvey = () => {
               </Flex>
             </Flex>
           </Container>
-          {survey.surveyQuestions &&
-            survey.surveyQuestions.map((question) => (
-              <EditQuestion
-                key={question.questionId}
-                questionItem={question}
-                handleQuestionChange={handleQuestionChange}
-                deleteQuestion={deleteQuestion}
-                duplicateQuestion={duplicateQuestion}
-              />
-            ))}
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="questions">
+              {(provided) => (
+                <Flex
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  flexDirection="column"
+                  w={"100%"}
+                >
+                  {survey.surveyQuestions &&
+                    survey.surveyQuestions.map((question, index) => (
+                      <EditQuestion
+                        key={question.questionId}
+                        index={index}
+                        questionItem={question}
+                        handleQuestionChange={handleQuestionChange}
+                        deleteQuestion={deleteQuestion}
+                        duplicateQuestion={duplicateQuestion}
+                      />
+                    ))}
+                  {provided.placeholder}
+                </Flex>
+              )}
+            </Droppable>
+          </DragDropContext>
         </Flex>
       )}
     </Container>
