@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Flex, Icon, Text, Spinner, Button } from "@chakra-ui/react";
@@ -14,6 +14,7 @@ import ErrorMessage from "components/ErrorMessage";
 import EditQuestion from "components/EditQuestion/EditQuestion";
 
 const EditSurvey = () => {
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { survey, loading, error, errorMessage } = useSelector(
@@ -40,6 +41,7 @@ const EditSurvey = () => {
       isRequired: false,
       options: [],
     };
+    setSelectedQuestion(newQuestion.questionId);
     handleSurveyUpdate("surveyQuestions", [
       ...survey.surveyQuestions,
       newQuestion,
@@ -48,9 +50,20 @@ const EditSurvey = () => {
   };
 
   const deleteQuestion = (questionId) => {
+    const qIndex = survey.surveyQuestions.findIndex(
+      (q) => q.questionId === questionId
+    );
     const updatedQuestions = survey.surveyQuestions.filter(
       (q) => q.questionId !== questionId
     );
+    if (updatedQuestions.length) {
+      let newSelectedQuestionIndex = qIndex === 0 ? qIndex : qIndex - 1;
+      setSelectedQuestion(
+        updatedQuestions[newSelectedQuestionIndex].questionId
+      );
+    } else {
+      setSelectedQuestion(null);
+    }
     handleSurveyUpdate("surveyQuestions", updatedQuestions);
   };
 
@@ -63,6 +76,7 @@ const EditSurvey = () => {
       ...updatedQuestions[questionIndex],
       questionId: uuidv4(),
     };
+    setSelectedQuestion(duplicateQuestion.questionId);
     updatedQuestions.splice(questionIndex + 1, 0, duplicateQuestion);
     handleSurveyUpdate("surveyQuestions", updatedQuestions);
   };
@@ -159,7 +173,7 @@ const EditSurvey = () => {
               </Flex>
               <Flex alignItems="center">
                 <Text
-                  mr={3}
+                  mr={{ base: 2, md: 3 }}
                   color="teal.500"
                   _hover={{ color: "teal.600" }}
                   fontWeight="semibold"
@@ -204,6 +218,8 @@ const EditSurvey = () => {
                         handleQuestionChange={handleQuestionChange}
                         deleteQuestion={deleteQuestion}
                         duplicateQuestion={duplicateQuestion}
+                        isSelected={question.questionId === selectedQuestion}
+                        onSelect={(id) => setSelectedQuestion(id)}
                       />
                     ))}
                   {provided.placeholder}

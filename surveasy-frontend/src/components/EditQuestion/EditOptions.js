@@ -69,14 +69,14 @@ const EditOptions = ({ question, onChange }) => {
           justifyContent="space-between"
           alignItems="flex-end"
         >
-          <Flex alignItems="center">
+          <Flex alignItems="center" flex={1}>
             {question.questionType === "dropdown" ? (
               <Text>{index + 1}.</Text>
             ) : (
               renderQuestionType()
             )}
             <Input
-              w={{ base: 250, sm: 350, md: 400 }}
+              w={{ base: "80%", sm: 320, md: 400 }}
               ml={1}
               variant="flushed"
               value={option.text}
