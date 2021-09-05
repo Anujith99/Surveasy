@@ -12,6 +12,7 @@ import { isEmpty } from "helpers/utils";
 import { getSurveyById, updateSurvey } from "actions/survey/actions";
 import ErrorMessage from "components/ErrorMessage";
 import EditQuestion from "components/EditQuestion/EditQuestion";
+import RespondentInfo from "components/EditQuestion/RespondentInfo";
 
 const EditSurvey = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -200,6 +201,26 @@ const EditSurvey = () => {
               </Flex>
             </Flex>
           </Container>
+          {survey.respondentInfo && (
+            <Container mode="card" p={0} mb={3}>
+              <Flex
+                flexDirection="column"
+                bg="white"
+                shadow="sm"
+                borderRadius={5}
+                padding={{ base: 3, md: 4 }}
+                borderWidth={2}
+                borderColor="teal.500"
+              >
+                <RespondentInfo
+                  respondentInfo={survey.respondentInfo}
+                  handleChange={handleSurveyUpdate}
+                  isSelected={selectedQuestion === null}
+                  onClick={() => setSelectedQuestion(null)}
+                />
+              </Flex>
+            </Container>
+          )}
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="questions">
               {(provided) => (
