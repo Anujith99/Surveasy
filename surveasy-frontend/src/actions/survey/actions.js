@@ -121,12 +121,3 @@ export const createSurvey = (surveyInfo) => {
       });
   };
 };
-
-export const updateSurvey = (survey) => {
-  return async (dispatch) => {
-    dispatch({
-      type: TYPES.UPDATE_SURVEY,
-      payload: { survey },
-    });
-  };
-};

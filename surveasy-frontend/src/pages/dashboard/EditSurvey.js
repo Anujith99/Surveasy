@@ -9,7 +9,7 @@ import { animateScroll as Scroll } from "react-scroll";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import { isEmpty } from "helpers/utils";
-import { getSurveyById, updateSurvey } from "actions/survey/actions";
+import { editSurvey, getSurveyById } from "actions/survey/actions";
 import ErrorMessage from "components/ErrorMessage";
 import EditQuestion from "components/EditQuestion/EditQuestion";
 import RespondentInfo from "components/EditQuestion/RespondentInfo";
@@ -21,6 +21,8 @@ const EditSurvey = () => {
   const { survey, loading, error, errorMessage } = useSelector(
     (state) => state.survey.surveyHome
   );
+  const isSaving = useSelector((state) => state.survey.surveyForm.loading);
+  const [updatedSurvey, setUpdatedSurvey] = useState(survey);
 
   useEffect(() => {
     if (isEmpty(survey)) {
@@ -29,32 +31,49 @@ const EditSurvey = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (isEmpty(updatedSurvey) && !isEmpty(survey)) {
+      setUpdatedSurvey(survey);
+    }
+  }, [survey]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      console.log("CALL API");
+      dispatch(editSurvey(id, updatedSurvey));
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [updatedSurvey]);
+
   const handleSurveyUpdate = (key, updatedData) => {
-    dispatch(updateSurvey({ ...survey, [key]: updatedData }));
+    setUpdatedSurvey({ ...updatedSurvey, [key]: updatedData });
   };
 
   const addQuestion = () => {
     const newQuestion = {
       questionId: uuidv4(),
       questionType: "mcq",
-      questionTitle: "",
+      questionTitle: "Question Title",
       questionDescription: "",
       isRequired: false,
       options: [],
     };
     setSelectedQuestion(newQuestion.questionId);
     handleSurveyUpdate("surveyQuestions", [
-      ...survey.surveyQuestions,
+      ...updatedSurvey.surveyQuestions,
       newQuestion,
     ]);
     Scroll.scrollToBottom();
   };
 
   const deleteQuestion = (questionId) => {
-    const qIndex = survey.surveyQuestions.findIndex(
+    const qIndex = updatedSurvey.surveyQuestions.findIndex(
       (q) => q.questionId === questionId
     );
-    const updatedQuestions = survey.surveyQuestions.filter(
+    const updatedQuestions = updatedSurvey.surveyQuestions.filter(
       (q) => q.questionId !== questionId
     );
     if (updatedQuestions.length) {
@@ -69,7 +88,7 @@ const EditSurvey = () => {
   };
 
   const duplicateQuestion = (questionId) => {
-    let updatedQuestions = [...survey.surveyQuestions];
+    let updatedQuestions = [...updatedSurvey.surveyQuestions];
     const questionIndex = updatedQuestions.findIndex(
       (q) => q.questionId === questionId
     );
@@ -83,7 +102,7 @@ const EditSurvey = () => {
   };
 
   const handleQuestionChange = (id, updatedQuestion) => {
-    let updatedQuestions = [...survey.surveyQuestions];
+    let updatedQuestions = [...updatedSurvey.surveyQuestions];
     const questionIndex = updatedQuestions.findIndex(
       (q) => q.questionId === id
     );
@@ -102,7 +121,7 @@ const EditSurvey = () => {
     )
       return;
 
-    let updatedQuestions = [...survey.surveyQuestions];
+    let updatedQuestions = [...updatedSurvey.surveyQuestions];
     let draggedQuestion = updatedQuestions.find(
       (q) => q.questionId === draggableId
     );
@@ -173,16 +192,6 @@ const EditSurvey = () => {
                 </Button>
               </Flex>
               <Flex alignItems="center">
-                <Text
-                  mr={{ base: 2, md: 3 }}
-                  color="teal.500"
-                  _hover={{ color: "teal.600" }}
-                  fontWeight="semibold"
-                  textDecoration="underline"
-                  fontSize={{ base: "sm", sm: "initial" }}
-                >
-                  Last edit was seconds ago
-                </Text>
                 <Button
                   colorScheme="teal"
                   px={1}
@@ -191,17 +200,22 @@ const EditSurvey = () => {
                 >
                   <Icon as={FaSave} />
                 </Button>
-                <Button
-                  colorScheme="teal"
-                  leftIcon={<Icon as={FaSave} />}
-                  display={{ base: "none", sm: "block" }}
-                >
-                  Save
-                </Button>
+                {isSaving ? (
+                  <Button colorScheme="teal" isLoading loadingText="Saving" />
+                ) : (
+                  <Button
+                    colorScheme="teal"
+                    leftIcon={<Icon as={FaSave} />}
+                    display={{ base: "none", sm: "block" }}
+                    onClick={() => dispatch(editSurvey(id, updatedSurvey))}
+                  >
+                    Save
+                  </Button>
+                )}
               </Flex>
             </Flex>
           </Container>
-          {survey.respondentInfo && (
+          {updatedSurvey.respondentInfo && (
             <Container mode="card" p={0} mb={3}>
               <Flex
                 flexDirection="column"
@@ -213,7 +227,7 @@ const EditSurvey = () => {
                 borderColor="teal.500"
               >
                 <RespondentInfo
-                  respondentInfo={survey.respondentInfo}
+                  respondentInfo={updatedSurvey.respondentInfo}
                   handleChange={handleSurveyUpdate}
                   isSelected={selectedQuestion === null}
                   onClick={() => setSelectedQuestion(null)}
@@ -230,8 +244,8 @@ const EditSurvey = () => {
                   flexDirection="column"
                   w={"100%"}
                 >
-                  {survey.surveyQuestions &&
-                    survey.surveyQuestions.map((question, index) => (
+                  {updatedSurvey.surveyQuestions &&
+                    updatedSurvey.surveyQuestions.map((question, index) => (
                       <EditQuestion
                         key={question.questionId}
                         index={index}
