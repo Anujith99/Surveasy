@@ -76,7 +76,7 @@ const RespondentInfo = ({
 
   useEffect(() => {
     handleChange("respondentInfo", info);
-  }, [info]);
+  }, [info, handleChange]);
   return (
     <Flex flexDirection="column">
       {!isSelected ? (

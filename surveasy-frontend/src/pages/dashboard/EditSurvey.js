@@ -35,7 +35,7 @@ const EditSurvey = () => {
     if (isEmpty(updatedSurvey) && !isEmpty(survey)) {
       setUpdatedSurvey(survey);
     }
-  }, [survey]);
+  }, [survey, updatedSurvey]);
 
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -46,7 +46,7 @@ const EditSurvey = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, [updatedSurvey]);
+  }, [updatedSurvey, dispatch, id]);
 
   const handleSurveyUpdate = (key, updatedData) => {
     setUpdatedSurvey({ ...updatedSurvey, [key]: updatedData });
