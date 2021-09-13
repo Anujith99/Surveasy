@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Text,
@@ -38,6 +38,7 @@ const RespondentInfo = ({
       updatedInfo.splice(selectedIndex, 1);
     }
     setInfo(updatedInfo);
+    handleChange("respondentInfo", updatedInfo);
   };
 
   const handleSwitchChange = (val) => {
@@ -49,6 +50,7 @@ const RespondentInfo = ({
         isRequired: !updatedInfo[switchIndex].isRequired,
       };
       setInfo(updatedInfo);
+      handleChange("respondentInfo", updatedInfo);
     }
   };
 
@@ -74,9 +76,6 @@ const RespondentInfo = ({
     return outputString;
   };
 
-  useEffect(() => {
-    handleChange("respondentInfo", info);
-  }, [info, handleChange]);
   return (
     <Flex flexDirection="column">
       {!isSelected ? (
