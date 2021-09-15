@@ -17,7 +17,40 @@ const infoOptions = [
   { text: "Phone Number", value: "phoneNumber" },
 ];
 
-const RespondentInfo = ({
+export const RespondentInfoPreview = ({ info, onClick }) => {
+  const renderInfo = () => {
+    let outputString = "";
+    info.forEach((i, index) => {
+      let option = infoOptions.find((o) => o.value === i.info);
+      if (option) {
+        outputString += `${option.text}${
+          index !== info.length - 1 ? ", " : ""
+        }`;
+      }
+    });
+    return outputString;
+  };
+  return (
+    <Flex
+      align="center"
+      cursor={onClick ? "pointer" : "initial"}
+      onClick={onClick}
+    >
+      <Icon
+        as={FaUsers}
+        w={{ base: 5, md: 6 }}
+        h={{ base: 5, md: 6 }}
+        mr={2}
+        color="gray.600"
+      />
+      <Text fontWeight="semibold" fontSize={16}>
+        {info.length === 0 ? "Know Your Respondents" : renderInfo()}
+      </Text>
+    </Flex>
+  );
+};
+
+const EditRespondentInfo = ({
   respondentInfo,
   handleChange,
   isSelected,
@@ -63,34 +96,10 @@ const RespondentInfo = ({
     }
   };
 
-  const renderInfo = () => {
-    let outputString = "";
-    info.forEach((i, index) => {
-      let option = infoOptions.find((o) => o.value === i.info);
-      if (option) {
-        outputString += `${option.text}${
-          index !== info.length - 1 ? ", " : ""
-        }`;
-      }
-    });
-    return outputString;
-  };
-
   return (
     <Flex flexDirection="column">
       {!isSelected ? (
-        <Flex align="center" cursor="pointer" onClick={onClick}>
-          <Icon
-            as={FaUsers}
-            w={{ base: 5, md: 6 }}
-            h={{ base: 5, md: 6 }}
-            mr={2}
-            color="gray.600"
-          />
-          <Text fontWeight="semibold" fontSize={16}>
-            {info.length === 0 ? " Know Your Respondents" : renderInfo()}
-          </Text>
-        </Flex>
+        <RespondentInfoPreview info={respondentInfo} onClick={onClick} />
       ) : (
         <>
           <Flex align="center">
@@ -142,4 +151,4 @@ const RespondentInfo = ({
   );
 };
 
-export default RespondentInfo;
+export default EditRespondentInfo;

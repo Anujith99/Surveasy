@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { Box, Flex, Button, Icon } from "@chakra-ui/react";
 import { FaPencilAlt } from "react-icons/fa";
 import QuestionCard from "./Questions/QuestionCard";
+import { RespondentInfoPreview } from "./EditQuestion/EditRespondentInfo";
+import Container from "./Container";
 
 const QuestionsList = () => {
   const { survey } = useSelector((state) => state.survey.surveyHome);
@@ -21,6 +23,22 @@ const QuestionsList = () => {
           </Button>
         </Flex>
         <Flex mt={2} flexDirection="column" alignItems="center">
+          {survey.respondentInfo && (
+            <Container mode="card" p={0} mb={3}>
+              <Flex
+                w={"100%"}
+                bgColor="white"
+                borderRadius={5}
+                shadow="sm"
+                p={{ base: 3, md: 4 }}
+              >
+                <RespondentInfoPreview
+                  info={survey.respondentInfo}
+                  onClick={null}
+                />
+              </Flex>
+            </Container>
+          )}
           {survey.surveyQuestions && survey.surveyQuestions.length
             ? survey.surveyQuestions.map((question) => (
                 <QuestionCard question={question} />
