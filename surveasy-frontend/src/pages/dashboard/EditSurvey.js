@@ -12,7 +12,7 @@ import { isEmpty } from "helpers/utils";
 import { editSurvey, getSurveyById } from "actions/survey/actions";
 import ErrorMessage from "components/ErrorMessage";
 import EditQuestion from "components/EditQuestion/EditQuestion";
-import RespondentInfo from "components/EditQuestion/RespondentInfo";
+import EditRespondentInfo from "components/EditQuestion/EditRespondentInfo";
 
 const EditSurvey = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -226,7 +226,7 @@ const EditSurvey = () => {
                 borderWidth={2}
                 borderColor="teal.500"
               >
-                <RespondentInfo
+                <EditRespondentInfo
                   respondentInfo={updatedSurvey.respondentInfo}
                   handleChange={handleSurveyUpdate}
                   isSelected={selectedQuestion === null}

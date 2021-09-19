@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { motion } from "framer-motion";
 import Container from "components/Container";
 import {
   Button,
@@ -31,18 +32,22 @@ import {
 } from "actions/survey/actions";
 import {
   FaArrowLeft,
+  FaArrowUp,
   FaEllipsisV,
   FaEye,
   FaLink,
   FaPencilAlt,
   FaTrash,
 } from "react-icons/fa";
+import { animateScroll as Scroll } from "react-scroll";
 import ErrorMessage from "components/ErrorMessage";
 import Confirm from "components/Confirm";
 import Modal from "components/Modal";
 import SurveyForm from "components/Forms/SurveyForm";
 import QuestionsList from "components/QuestionsList";
 import Responses from "components/Responses";
+
+const ScrollToTopBtn = motion(Button);
 
 const SurveyHome = () => {
   const { id } = useParams();
@@ -57,6 +62,7 @@ const SurveyHome = () => {
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   const onActiveClose = () => setActiveOpen(false);
   const onDeleteClose = () => setDeleteOpen(false);
@@ -67,6 +73,18 @@ const SurveyHome = () => {
   };
   const handleDelete = () => {
     dispatch(deleteSurvey(id));
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleButtonVisibililty);
+  }, []);
+
+  const toggleButtonVisibililty = () => {
+    if (window.scrollY > 300) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
   };
 
   useEffect(() => {
@@ -176,7 +194,10 @@ const SurveyHome = () => {
                 onConfirm={handleToggleActivation}
                 confirmText={survey.isActive ? "Deactivate" : "Activate"}
                 confirmBtnColor={survey.isActive ? "red" : "teal"}
-                showToastOnConfirm={false}
+                showToastOnConfirm={true}
+                confirmToastText={`Survey ${
+                  survey.isActive ? "Deactivated" : "Activated"
+                } Successfully`}
               />
             )}
             {isDeleteOpen && (
@@ -226,7 +247,7 @@ const SurveyHome = () => {
               <Tab>Responses</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel>
+              <TabPanel p={0} pt={2}>
                 <QuestionsList />
               </TabPanel>
               <TabPanel>
@@ -234,6 +255,21 @@ const SurveyHome = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
+          {showButton && (
+            <ScrollToTopBtn
+              colorScheme="teal"
+              position="fixed"
+              bottom={{ base: 5, lg: 10 }}
+              right={{ base: 4, lg: 10 }}
+              onClick={() => Scroll.scrollToTop()}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              transition={{ duration: 0.05 }}
+            >
+              <Icon as={FaArrowUp} />
+            </ScrollToTopBtn>
+          )}
         </Flex>
       )}
     </Container>

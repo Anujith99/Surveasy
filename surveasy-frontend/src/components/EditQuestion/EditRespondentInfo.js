@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Text,
@@ -17,7 +17,53 @@ const infoOptions = [
   { text: "Phone Number", value: "phoneNumber" },
 ];
 
-const RespondentInfo = ({
+export const RespondentInfoPreview = ({ info, onClick }) => {
+  const renderInfo = (item, index) => {
+    let outputString = "";
+    let option = infoOptions.find((o) => o.value === item.info);
+    if (option) {
+      outputString = option.text;
+    }
+    return (
+      <Text fontWeight="semibold" fontSize={{ base: 14, md: 16 }}>
+        {outputString}
+        {item.isRequired && <span style={{ color: "red" }}>*</span>}
+        {index !== info.length - 1 ? `, ` : ""}
+      </Text>
+    );
+  };
+  return (
+    <Flex
+      align="center"
+      cursor={onClick ? "pointer" : "initial"}
+      onClick={onClick}
+    >
+      <Icon
+        as={FaUsers}
+        w={{ base: 5, md: 6 }}
+        h={{ base: 5, md: 6 }}
+        mr={2}
+        color="gray.600"
+      />
+      {info.length === 0 ? (
+        <Flex alignItems="center">
+          <Text fontWeight="semibold" fontSize={{ base: 14, md: 16 }} mr={1}>
+            Know Your Respondents
+          </Text>
+          {!onClick && (
+            <Text color="gray.500" fontSize={{ base: 12, md: 14 }}>
+              Click on 'Edit' to get started.
+            </Text>
+          )}
+        </Flex>
+      ) : (
+        <Flex>{info.map((item, index) => renderInfo(item, index))}</Flex>
+      )}
+    </Flex>
+  );
+};
+
+const EditRespondentInfo = ({
   respondentInfo,
   handleChange,
   isSelected,
@@ -38,6 +84,7 @@ const RespondentInfo = ({
       updatedInfo.splice(selectedIndex, 1);
     }
     setInfo(updatedInfo);
+    handleChange("respondentInfo", updatedInfo);
   };
 
   const handleSwitchChange = (val) => {
@@ -49,6 +96,7 @@ const RespondentInfo = ({
         isRequired: !updatedInfo[switchIndex].isRequired,
       };
       setInfo(updatedInfo);
+      handleChange("respondentInfo", updatedInfo);
     }
   };
 
@@ -61,37 +109,10 @@ const RespondentInfo = ({
     }
   };
 
-  const renderInfo = () => {
-    let outputString = "";
-    info.forEach((i, index) => {
-      let option = infoOptions.find((o) => o.value === i.info);
-      if (option) {
-        outputString += `${option.text}${
-          index !== info.length - 1 ? ", " : ""
-        }`;
-      }
-    });
-    return outputString;
-  };
-
-  useEffect(() => {
-    handleChange("respondentInfo", info);
-  }, [info, handleChange]);
   return (
     <Flex flexDirection="column">
       {!isSelected ? (
-        <Flex align="center" cursor="pointer" onClick={onClick}>
-          <Icon
-            as={FaUsers}
-            w={{ base: 5, md: 6 }}
-            h={{ base: 5, md: 6 }}
-            mr={2}
-            color="gray.600"
-          />
-          <Text fontWeight="semibold" fontSize={16}>
-            {info.length === 0 ? " Know Your Respondents" : renderInfo()}
-          </Text>
-        </Flex>
+        <RespondentInfoPreview info={respondentInfo} onClick={onClick} />
       ) : (
         <>
           <Flex align="center">
@@ -143,4 +164,4 @@ const RespondentInfo = ({
   );
 };
 
-export default RespondentInfo;
+export default EditRespondentInfo;
