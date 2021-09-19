@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import FormError from "./FormError";
 import { createSurvey, editSurvey } from "actions/survey/actions";
-import useClearState from "helpers/hooks/useClearState";
+// import useClearState from "helpers/hooks/useClearState";
 import { SURVEY_FORM_RESET } from "actions/survey/types";
 import ErrorMessage from "components/ErrorMessage";
 
@@ -56,7 +56,10 @@ const SurveyForm = ({ onSuccess, survey, isEdit }) => {
       const fields = ["surveyTitle", "surveyDescription"];
       fields.map((field) => setValue(field, survey[field]));
     }
-  }, [isEdit, setValue, survey]);
+    return () => {
+      dispatch({ type: SURVEY_FORM_RESET });
+    };
+  }, [isEdit, setValue, survey, dispatch]);
 
   const toast = useToast();
 
@@ -73,7 +76,7 @@ const SurveyForm = ({ onSuccess, survey, isEdit }) => {
     }
   }, [success, onSuccess, toast, isEdit]);
 
-  useClearState(SURVEY_FORM_RESET);
+  // useClearState(SURVEY_FORM_RESET);
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

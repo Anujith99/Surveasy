@@ -194,7 +194,10 @@ const SurveyHome = () => {
                 onConfirm={handleToggleActivation}
                 confirmText={survey.isActive ? "Deactivate" : "Activate"}
                 confirmBtnColor={survey.isActive ? "red" : "teal"}
-                showToastOnConfirm={false}
+                showToastOnConfirm={true}
+                confirmToastText={`Survey ${
+                  survey.isActive ? "Deactivated" : "Activated"
+                } Successfully`}
               />
             )}
             {isDeleteOpen && (

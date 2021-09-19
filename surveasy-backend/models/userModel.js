@@ -24,10 +24,7 @@ const userSchema = mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
       index: true,
-      validate: [
-        (val) => validator.isEmail(val),
-        "First Name must be only letters",
-      ],
+      validate: [(val) => validator.isEmail(val), "Please enter a valid Email"],
     },
     password: {
       type: mongoose.SchemaTypes.String,

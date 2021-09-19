@@ -54,7 +54,7 @@ const UserAvatar = () => {
   const { userInfo } = useSelector((state) => state.user.info);
   const fullName = isEmpty(userInfo)
     ? ""
-    : userInfo.firstName + " " + userInfo.lastName;
+    : `${userInfo.firstName} ${userInfo.lastName ? userInfo.lastName : ""}`;
   const logout = () => dispatch(logoutUser());
   return (
     <Menu autoSelect={false}>

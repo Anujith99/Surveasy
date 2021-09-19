@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Box, Flex, Button, Icon } from "@chakra-ui/react";
+import { Box, Flex, Button, Icon, Text } from "@chakra-ui/react";
 import { FaPencilAlt } from "react-icons/fa";
 import QuestionCard from "./Questions/QuestionCard";
 import { RespondentInfoPreview } from "./EditQuestion/EditRespondentInfo";
@@ -39,11 +39,16 @@ const QuestionsList = () => {
               </Flex>
             </Container>
           )}
-          {survey.surveyQuestions && survey.surveyQuestions.length
-            ? survey.surveyQuestions.map((question) => (
-                <QuestionCard question={question} />
-              ))
-            : null}
+          {survey.surveyQuestions && survey.surveyQuestions.length ? (
+            survey.surveyQuestions.map((question) => (
+              <QuestionCard question={question} />
+            ))
+          ) : (
+            <Box w="280px" textAlign="center" color="gray.600" mt={4}>
+              <Text fontSize="2xl">You have no questions!</Text>
+              <Text mt={2}>Click on the 'Edit' button to get started.</Text>
+            </Box>
+          )}
         </Flex>
       </Box>
     </>

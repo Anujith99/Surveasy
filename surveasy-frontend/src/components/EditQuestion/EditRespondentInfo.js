@@ -18,17 +18,19 @@ const infoOptions = [
 ];
 
 export const RespondentInfoPreview = ({ info, onClick }) => {
-  const renderInfo = () => {
+  const renderInfo = (item, index) => {
     let outputString = "";
-    info.forEach((i, index) => {
-      let option = infoOptions.find((o) => o.value === i.info);
-      if (option) {
-        outputString += `${option.text}${
-          index !== info.length - 1 ? ", " : ""
-        }`;
-      }
-    });
-    return outputString;
+    let option = infoOptions.find((o) => o.value === item.info);
+    if (option) {
+      outputString = option.text;
+    }
+    return (
+      <Text fontWeight="semibold" fontSize={{ base: 14, md: 16 }}>
+        {outputString}
+        {item.isRequired && <span style={{ color: "red" }}>*</span>}
+        {index !== info.length - 1 ? `, ` : ""}
+      </Text>
+    );
   };
   return (
     <Flex
@@ -43,9 +45,20 @@ export const RespondentInfoPreview = ({ info, onClick }) => {
         mr={2}
         color="gray.600"
       />
-      <Text fontWeight="semibold" fontSize={16}>
-        {info.length === 0 ? "Know Your Respondents" : renderInfo()}
-      </Text>
+      {info.length === 0 ? (
+        <Flex alignItems="center">
+          <Text fontWeight="semibold" fontSize={{ base: 14, md: 16 }} mr={1}>
+            Know Your Respondents
+          </Text>
+          {!onClick && (
+            <Text color="gray.500" fontSize={{ base: 12, md: 14 }}>
+              Click on 'Edit' to get started.
+            </Text>
+          )}
+        </Flex>
+      ) : (
+        <Flex>{info.map((item, index) => renderInfo(item, index))}</Flex>
+      )}
     </Flex>
   );
 };
