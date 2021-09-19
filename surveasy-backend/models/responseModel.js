@@ -39,10 +39,6 @@ const responseSchema = mongoose.Schema(
           type: mongoose.SchemaTypes.Mixed,
           required: [true, "Answer should be a non-null value"],
         },
-        questionIndex: {
-          type: mongoose.SchemaTypes.Number,
-          required: [true, "Must include question index"],
-        },
       },
     ],
   },

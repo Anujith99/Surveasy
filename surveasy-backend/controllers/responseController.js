@@ -42,7 +42,6 @@ const getResponsesSummary = async (req, res, next) => {
         $group: {
           _id: "$answers.questionId",
           questionTitle: { $first: "$answers.questionTitle" },
-          questionIndex: { $first: "$answers.questionIndex" },
           answers: { $push: "$answers" },
           total: { $sum: 1 },
         },
@@ -65,6 +64,7 @@ const getResponsesSummary = async (req, res, next) => {
                 _id: 0,
                 questionType: "$surveyQuestions.questionType",
                 options: "$surveyQuestions.options",
+                questionIndex: "$surveyQuestions.questionIndex",
               },
             },
           ],
@@ -72,7 +72,7 @@ const getResponsesSummary = async (req, res, next) => {
         },
       },
       { $unwind: "$questionInfo" },
-      { $sort: { questionIndex: 1 } },
+      { $sort: { "questionInfo.questionIndex": 1 } },
     ]);
 
     res.json({ summary });
