@@ -12,6 +12,7 @@ import {
 import logger from "./config/logger.js";
 
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import responseRoutes from "./routes/responseRoutes.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/dashboard", dashboardRoutes);
+app.use("/response", responseRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlingMiddleware);
