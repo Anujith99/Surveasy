@@ -11,6 +11,10 @@ const questionSchema = mongoose.Schema(
         "Question ID is not a valid UUID",
       ],
     },
+    questionIndex: {
+      type: mongoose.SchemaTypes.Number,
+      required: [true, "Question index is required"],
+    },
     questionType: {
       type: mongoose.SchemaTypes.String,
       required: true,
