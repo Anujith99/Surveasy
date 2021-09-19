@@ -56,6 +56,7 @@ const EditSurvey = () => {
     const newQuestion = {
       questionId: uuidv4(),
       questionType: "mcq",
+      questionIndex: updatedSurvey.surveyQuestions.length,
       questionTitle: "Question Title",
       questionDescription: "",
       isRequired: false,
@@ -128,6 +129,10 @@ const EditSurvey = () => {
     if (draggedQuestion) {
       updatedQuestions.splice(source.index, 1);
       updatedQuestions.splice(destination.index, 0, draggedQuestion);
+      updatedQuestions = updatedQuestions.map((question, index) => ({
+        ...question,
+        questionIndex: index,
+      }));
       handleSurveyUpdate("surveyQuestions", updatedQuestions);
     } else {
       return;
