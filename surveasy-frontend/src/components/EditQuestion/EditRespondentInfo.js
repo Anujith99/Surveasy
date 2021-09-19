@@ -57,7 +57,9 @@ export const RespondentInfoPreview = ({ info, onClick }) => {
           )}
         </Flex>
       ) : (
-        <Flex>{info.map((item, index) => renderInfo(item, index))}</Flex>
+        <Flex flexWrap="wrap">
+          {info.map((item, index) => renderInfo(item, index))}
+        </Flex>
       )}
     </Flex>
   );
