@@ -10,6 +10,12 @@ import "./index.css";
 import DashboardApp from "./DashboardApp";
 import SurveyApp from "./SurveyApp";
 
+let path = window.location.pathname.split("/")[1];
+
+if (path === "survey") {
+  document.body.classList.add("survey");
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>

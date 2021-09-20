@@ -1,11 +1,8 @@
 import React from "react";
+import SurveyRoutes from "routes/survey/SurveyRoutes";
 
 const SurveyApp = () => {
-  return (
-    <div>
-      <h1>Survey App</h1>
-    </div>
-  );
+  return <SurveyRoutes />;
 };
 
 export default SurveyApp;

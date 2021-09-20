@@ -9,3 +9,7 @@ body {
   box-sizing: border-box;
   background-color: #f7fafc !important;
 }
+
+.survey {
+  background-image: url("./resources/Final\ BG.png");
+}
