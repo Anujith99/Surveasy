@@ -1,5 +1,9 @@
-import React from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Flex, Text, Button, Box } from "@chakra-ui/react";
+
+import Container from "components/Container";
+import RespondentInfo from "components/Questions/RespondentInfo";
+import QuestionCard from "components/Questions/QuestionCard";
 
 let survey = {
   surveyDescription:
@@ -105,10 +109,93 @@ let survey = {
   __v: 0,
 };
 
-const Survey = () => {
+const TitleCard = ({ surveyTitle, surveyDescription, respondentInfo }) => {
   return (
-    <Flex justifyContent="center" pt={{ base: 2, md: 4 }}>
-      <Text fontSize="xxx-large">Survey App</Text>
+    <Container mode="card" p={0}>
+      <Flex
+        w={"100%"}
+        flexDirection="column"
+        bg="white"
+        borderRadius={5}
+        p={{ base: 3, md: 4 }}
+        shadow="sm"
+      >
+        <Text
+          fontSize={{ base: "x-large", md: "xx-large" }}
+          fontWeight="semibold"
+        >
+          {surveyTitle}
+        </Text>
+        <Text
+          color="gray.700"
+          fontSize={{ base: "medium", md: "large" }}
+          pt={1}
+          mb={2}
+        >
+          {surveyDescription}
+        </Text>
+        <RespondentInfo info={respondentInfo} />
+      </Flex>
+    </Container>
+  );
+};
+
+const Survey = () => {
+  const [currentStep, setCurrentStep] = useState(null);
+
+  const noOfQuestions = survey.surveyQuestions
+    ? survey.surveyQuestions.length
+    : 0;
+
+  const onNextClick = () => {
+    if (currentStep === noOfQuestions - 1) {
+      console.log("FINISH");
+    } else {
+      const nextStep = currentStep === null ? 0 : currentStep + 1;
+      setCurrentStep(nextStep);
+    }
+  };
+
+  const onPrevClick = () => {
+    const prevStep = currentStep === 0 ? null : currentStep - 1;
+    setCurrentStep(prevStep);
+  };
+  return (
+    <Flex
+      flexDirection="column"
+      pt={{ base: 2, md: 4 }}
+      px={{ base: 1, md: 0 }}
+    >
+      {currentStep === null ? (
+        <TitleCard
+          surveyTitle={survey.surveyTitle}
+          surveyDescription={survey.surveyDescription}
+          respondentInfo={survey.respondentInfo}
+        />
+      ) : (
+        <QuestionCard question={survey.surveyQuestions[currentStep]} />
+      )}
+      <Container mode="card" p={0}>
+        <Flex
+          justifyContent={currentStep === null ? "flex-end" : "space-between"}
+          alignItems="center"
+          mt={3}
+          w="100%"
+        >
+          {currentStep !== null && (
+            <Button px={6} colorScheme="teal" onClick={onPrevClick}>
+              Prev
+            </Button>
+          )}
+          <Button px={6} colorScheme="teal" onClick={onNextClick}>
+            {currentStep === null
+              ? "Start"
+              : currentStep === noOfQuestions - 1
+              ? "Finish"
+              : "Next"}
+          </Button>
+        </Flex>
+      </Container>
     </Flex>
   );
 };
