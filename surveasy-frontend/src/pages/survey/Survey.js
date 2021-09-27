@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Flex, Text, Button, Box } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Flex, Text, Button } from "@chakra-ui/react";
 
 import Container from "components/Container";
 import RespondentInfo from "components/Questions/RespondentInfo";
 import QuestionCard from "components/Questions/QuestionCard";
+import { SurveyContext } from "helpers/context";
 
 let survey = {
   surveyDescription:
@@ -142,6 +143,32 @@ const TitleCard = ({ surveyTitle, surveyDescription, respondentInfo }) => {
 
 const Survey = () => {
   const [currentStep, setCurrentStep] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [respondentInfo, setRespondentInfo] = useState({});
+
+  useEffect(() => {
+    const answerObj = survey.surveyQuestions.reduce((obj, item) => {
+      let answer = {
+        questionId: item.questionId,
+        questionTitle: item.questionTitle,
+        answer: item.questionType === "checkbox" ? [] : "",
+      };
+      obj[item["questionId"]] = answer;
+      return obj;
+    }, {});
+
+    const respondentInfoObj = survey.respondentInfo.reduce((obj, item) => {
+      let info = {
+        info: item.info,
+        value: "",
+      };
+      obj[item["info"]] = info;
+      return obj;
+    }, {});
+
+    setAnswers(answerObj);
+    setRespondentInfo(respondentInfoObj);
+  }, []);
 
   const noOfQuestions = survey.surveyQuestions
     ? survey.surveyQuestions.length
@@ -149,7 +176,12 @@ const Survey = () => {
 
   const onNextClick = () => {
     if (currentStep === noOfQuestions - 1) {
-      console.log("FINISH");
+      let data = {
+        surveyId: survey._id,
+        respondentInfo,
+        answers,
+      };
+      console.log(data);
     } else {
       const nextStep = currentStep === null ? 0 : currentStep + 1;
       setCurrentStep(nextStep);
@@ -160,43 +192,61 @@ const Survey = () => {
     const prevStep = currentStep === 0 ? null : currentStep - 1;
     setCurrentStep(prevStep);
   };
+
+  const contextValue = {
+    respondentInfo,
+    answers,
+    getAnswer: (id) => answers[id],
+    updateAnswer: (questionId, updatedAnswer) => {
+      let updatedAnswers = { ...answers };
+      updatedAnswers[questionId].answer = updatedAnswer;
+      setAnswers(updatedAnswers);
+    },
+    updateRespondentInfo: (info, updatedValue) => {
+      let updatedInfo = { ...respondentInfo };
+      updatedInfo[info].value = updatedValue;
+      setRespondentInfo(updatedInfo);
+    },
+  };
   return (
-    <Flex
-      flexDirection="column"
-      pt={{ base: 2, md: 4 }}
-      px={{ base: 1, md: 0 }}
-    >
-      {currentStep === null ? (
-        <TitleCard
-          surveyTitle={survey.surveyTitle}
-          surveyDescription={survey.surveyDescription}
-          respondentInfo={survey.respondentInfo}
-        />
-      ) : (
-        <QuestionCard question={survey.surveyQuestions[currentStep]} />
-      )}
-      <Container mode="card" p={0}>
-        <Flex
-          justifyContent={currentStep === null ? "flex-end" : "space-between"}
-          alignItems="center"
-          mt={3}
-          w="100%"
-        >
-          {currentStep !== null && (
-            <Button px={6} colorScheme="teal" onClick={onPrevClick}>
-              Prev
+    <SurveyContext.Provider value={contextValue}>
+      <Flex
+        flexDirection="column"
+        pt={{ base: 2, md: 4 }}
+        px={{ base: 1, md: 0 }}
+      >
+        {currentStep === null ? (
+          <TitleCard
+            surveyTitle={survey.surveyTitle}
+            surveyDescription={survey.surveyDescription}
+            respondentInfo={survey.respondentInfo}
+          />
+        ) : (
+          <QuestionCard question={survey.surveyQuestions[currentStep]} />
+        )}
+        <Container mode="card" p={0}>
+          <Flex
+            justifyContent={currentStep === null ? "flex-end" : "space-between"}
+            alignItems="center"
+            mt={3}
+            w="100%"
+          >
+            {currentStep !== null && (
+              <Button px={6} colorScheme="teal" onClick={onPrevClick}>
+                Prev
+              </Button>
+            )}
+            <Button px={6} colorScheme="teal" onClick={onNextClick}>
+              {currentStep === null
+                ? "Start"
+                : currentStep === noOfQuestions - 1
+                ? "Finish"
+                : "Next"}
             </Button>
-          )}
-          <Button px={6} colorScheme="teal" onClick={onNextClick}>
-            {currentStep === null
-              ? "Start"
-              : currentStep === noOfQuestions - 1
-              ? "Finish"
-              : "Next"}
-          </Button>
-        </Flex>
-      </Container>
-    </Flex>
+          </Flex>
+        </Container>
+      </Flex>
+    </SurveyContext.Provider>
   );
 };
 
