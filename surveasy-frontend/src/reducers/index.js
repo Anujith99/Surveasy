@@ -3,11 +3,13 @@ import { combineReducers } from "redux";
 import userReducer from "./userReducers";
 import dashboardReducer from "./dashboardReducers";
 import surveyReducer from "./surveyReducers";
+import respondentReducer from "./respondentReducer";
 
 const appReducer = combineReducers({
   user: userReducer,
   dashboard: dashboardReducer,
   survey: surveyReducer,
+  respondent: respondentReducer,
 });
 
 const rootReducer = (state, action) => {

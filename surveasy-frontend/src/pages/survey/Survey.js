@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Text, Button } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { Flex, Text, Button, Spinner } from "@chakra-ui/react";
 import validator from "validator";
 import moment from "moment";
 
@@ -7,8 +9,11 @@ import Container from "components/Container";
 import RespondentInfo from "components/Questions/RespondentInfo";
 import QuestionCard from "components/Questions/QuestionCard";
 import { SurveyContext } from "helpers/context";
+import { isEmpty } from "helpers/utils";
+import { getQuestions } from "actions/respondent/actions";
+import ErrorMessage from "components/ErrorMessage";
 
-let survey = {
+let surveyData = {
   surveyDescription:
     "This is a test survey to ensure that all types of questions are working!!",
   isActive: true,
@@ -143,7 +148,7 @@ const TitleCard = ({ surveyTitle, surveyDescription, respondentInfo }) => {
   );
 };
 
-const Survey = () => {
+const SurveyForm = ({ survey }) => {
   const [currentStep, setCurrentStep] = useState(null);
   const [answers, setAnswers] = useState({});
   const [respondentInfo, setRespondentInfo] = useState({});
@@ -151,28 +156,30 @@ const Survey = () => {
   const [respondentError, setRespondentError] = useState({});
 
   useEffect(() => {
-    const answerObj = survey.surveyQuestions.reduce((obj, item) => {
-      let answer = {
-        questionId: item.questionId,
-        questionTitle: item.questionTitle,
-        answer: item.questionType === "checkbox" ? [] : "",
-      };
-      obj[item["questionId"]] = answer;
-      return obj;
-    }, {});
+    if (!isEmpty(survey)) {
+      const answerObj = survey.surveyQuestions.reduce((obj, item) => {
+        let answer = {
+          questionId: item.questionId,
+          questionTitle: item.questionTitle,
+          answer: item.questionType === "checkbox" ? [] : "",
+        };
+        obj[item["questionId"]] = answer;
+        return obj;
+      }, {});
 
-    const respondentInfoObj = survey.respondentInfo.reduce((obj, item) => {
-      let info = {
-        info: item.info,
-        value: "",
-      };
-      obj[item["info"]] = info;
-      return obj;
-    }, {});
+      const respondentInfoObj = survey.respondentInfo.reduce((obj, item) => {
+        let info = {
+          info: item.info,
+          value: "",
+        };
+        obj[item["info"]] = info;
+        return obj;
+      }, {});
 
-    setAnswers(answerObj);
-    setRespondentInfo(respondentInfoObj);
-  }, []);
+      setAnswers(answerObj);
+      setRespondentInfo(respondentInfoObj);
+    }
+  }, [survey]);
 
   const noOfQuestions = survey.surveyQuestions
     ? survey.surveyQuestions.length
@@ -260,48 +267,110 @@ const Survey = () => {
     respondentError,
   };
   return (
-    <SurveyContext.Provider value={contextValue}>
-      <Flex
-        flexDirection="column"
-        pt={{ base: 2, md: 4 }}
-        px={{ base: 1, md: 0 }}
-      >
-        {currentStep === null ? (
-          <TitleCard
-            surveyTitle={survey.surveyTitle}
-            surveyDescription={survey.surveyDescription}
-            respondentInfo={survey.respondentInfo}
-          />
-        ) : (
-          <QuestionCard question={survey.surveyQuestions[currentStep]} />
-        )}
-        <Container mode="card" p={0}>
+    <>
+      {isEmpty(survey) ? null : (
+        <SurveyContext.Provider value={contextValue}>
           <Flex
-            justifyContent={currentStep === null ? "flex-end" : "space-between"}
-            alignItems="center"
-            my={3}
-            w="100%"
+            flexDirection="column"
+            pt={{ base: 2, md: 4 }}
+            px={{ base: 1, md: 0 }}
           >
-            {currentStep !== null && (
-              <Button px={6} colorScheme="teal" onClick={onPrevClick}>
-                Prev
-              </Button>
+            {currentStep === null ? (
+              <TitleCard
+                surveyTitle={survey.surveyTitle}
+                surveyDescription={survey.surveyDescription}
+                respondentInfo={survey.respondentInfo}
+              />
+            ) : (
+              <QuestionCard question={survey.surveyQuestions[currentStep]} />
             )}
-            <Button
-              px={6}
-              colorScheme="teal"
-              onClick={currentStep === null ? validateInfo : validateQuestion}
-            >
-              {currentStep === null
-                ? "Start"
-                : currentStep === noOfQuestions - 1
-                ? "Finish"
-                : "Next"}
-            </Button>
+            <Container mode="card" p={0}>
+              <Flex
+                justifyContent={
+                  currentStep === null ? "flex-end" : "space-between"
+                }
+                alignItems="center"
+                my={3}
+                w="100%"
+              >
+                {currentStep !== null && (
+                  <Button px={6} colorScheme="teal" onClick={onPrevClick}>
+                    Prev
+                  </Button>
+                )}
+                <Button
+                  px={6}
+                  colorScheme="teal"
+                  onClick={
+                    currentStep === null ? validateInfo : validateQuestion
+                  }
+                >
+                  {currentStep === null
+                    ? "Start"
+                    : currentStep === noOfQuestions - 1
+                    ? "Finish"
+                    : "Next"}
+                </Button>
+              </Flex>
+            </Container>
           </Flex>
-        </Container>
-      </Flex>
-    </SurveyContext.Provider>
+        </SurveyContext.Provider>
+      )}
+    </>
+  );
+};
+
+const Survey = () => {
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { loading, survey, error, errorMessage } = useSelector(
+    (state) => state.respondent.questions
+  );
+  useEffect(() => {
+    dispatch(getQuestions(id));
+  }, []);
+  return (
+    <>
+      {loading ? (
+        <Flex h={"100%"} alignItems="center">
+          <Container mode="card" p={0}>
+            <Flex
+              flexDirection="column"
+              p={{ base: 3, md: 4 }}
+              bg="white"
+              shadow="sm"
+              borderRadius={4}
+              alignItems="center"
+            >
+              <Spinner color="teal.500" size="xl" thickness={4} />
+              <Text fontSize="xl" mt={3} fontWeight="semibold">
+                Fetching Survey...
+              </Text>
+            </Flex>
+          </Container>
+        </Flex>
+      ) : error ? (
+        <Flex h="100%" alignItems="center">
+          <Container mode="card" p={0}>
+            <ErrorMessage>
+              {errorMessage !== null
+                ? errorMessage
+                : "Could not fetch this survey. Please check the entered URL."}
+            </ErrorMessage>
+          </Container>
+        </Flex>
+      ) : !survey.isActive ? (
+        <Flex h="100%" alignItems="center">
+          <Container mode="card" p={0}>
+            <ErrorMessage>
+              This survey has been deactivated. Please contact the survey owner.
+            </ErrorMessage>
+          </Container>
+        </Flex>
+      ) : (
+        <SurveyForm survey={survey} />
+      )}
+    </>
   );
 };
 
