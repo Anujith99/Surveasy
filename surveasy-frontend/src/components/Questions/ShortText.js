@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Box, Input } from "@chakra-ui/react";
 import { SurveyContext } from "helpers/context";
+import FormError from "components/Forms/FormError";
 
 const ShortText = ({ id }) => {
   const context = useContext(SurveyContext);
@@ -23,6 +24,9 @@ const ShortText = ({ id }) => {
           />
         </Box>
       </Box>
+      {context && context.questionError ? (
+        <FormError>This answer is required</FormError>
+      ) : null}
     </>
   );
 };

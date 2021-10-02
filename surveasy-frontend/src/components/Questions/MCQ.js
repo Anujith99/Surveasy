@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Radio, RadioGroup, Stack } from "@chakra-ui/react";
 import { SurveyContext } from "helpers/context";
+import FormError from "components/Forms/FormError";
 
 const MCQ = ({ options, id }) => {
   const context = useContext(SurveyContext);
@@ -12,15 +13,20 @@ const MCQ = ({ options, id }) => {
     }
   };
   return (
-    <RadioGroup value={answer} onChange={handleChange}>
-      <Stack>
-        {options.map((option) => (
-          <Radio colorScheme="teal" key={option.id} value={option.value}>
-            {option.text}
-          </Radio>
-        ))}
-      </Stack>
-    </RadioGroup>
+    <>
+      <RadioGroup value={answer} onChange={handleChange}>
+        <Stack>
+          {options.map((option) => (
+            <Radio colorScheme="teal" key={option.id} value={option.value}>
+              {option.text}
+            </Radio>
+          ))}
+        </Stack>
+      </RadioGroup>
+      {context && context.questionError ? (
+        <FormError>Please select one option</FormError>
+      ) : null}
+    </>
   );
 };
 

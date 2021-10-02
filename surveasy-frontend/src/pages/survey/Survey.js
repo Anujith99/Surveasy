@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import validator from "validator";
+import moment from "moment";
 
 import Container from "components/Container";
 import RespondentInfo from "components/Questions/RespondentInfo";
@@ -15,8 +17,8 @@ let survey = {
   userID: "60dc8eac80fbc40f60d05169",
   respondentInfo: [
     { isRequired: true, info: "name" },
-    { isRequired: false, info: "gender" },
-    { isRequired: true, info: "email" },
+    { isRequired: true, info: "gender" },
+    { isRequired: false, info: "email" },
     { isRequired: false, info: "dob" },
     { isRequired: false, info: "phoneNumber" },
   ],
@@ -145,6 +147,8 @@ const Survey = () => {
   const [currentStep, setCurrentStep] = useState(null);
   const [answers, setAnswers] = useState({});
   const [respondentInfo, setRespondentInfo] = useState({});
+  const [questionError, setQuestionError] = useState(false);
+  const [respondentError, setRespondentError] = useState({});
 
   useEffect(() => {
     const answerObj = survey.surveyQuestions.reduce((obj, item) => {
@@ -174,6 +178,50 @@ const Survey = () => {
     ? survey.surveyQuestions.length
     : 0;
 
+  const validateDate = (dateStr) => {
+    return (
+      !moment(dateStr, "DD-MM-YYYY", true).isValid() ||
+      !moment(dateStr, "DD-MM-YYYY", true).isBefore()
+    );
+  };
+
+  const validateInfo = () => {
+    const info = survey.respondentInfo;
+    let errors = {};
+    info.forEach((i) => {
+      const { value } = respondentInfo[i.info];
+      errors[i.info] = i.isRequired && !value.length;
+      if (!errors[i.info] && value.length) {
+        errors[i.info] =
+          i.info === "email"
+            ? !validator.isEmail(value)
+            : i.info === "phoneNumber"
+            ? !/^\d{10}$/.test(value)
+            : i.info === "dob"
+            ? validateDate(value)
+            : false;
+      }
+    });
+    setRespondentError(errors);
+    if (!Object.values(errors).includes(true)) {
+      onNextClick();
+    }
+  };
+
+  const validateQuestion = () => {
+    if (survey.surveyQuestions[currentStep].isRequired) {
+      let questionId = survey.surveyQuestions[currentStep].questionId;
+      if (answers[questionId].answer.length === 0) {
+        setQuestionError(true);
+      } else {
+        setQuestionError(false);
+        onNextClick();
+      }
+    } else {
+      onNextClick();
+    }
+  };
+
   const onNextClick = () => {
     if (currentStep === noOfQuestions - 1) {
       let data = {
@@ -189,6 +237,7 @@ const Survey = () => {
   };
 
   const onPrevClick = () => {
+    setQuestionError(false);
     const prevStep = currentStep === 0 ? null : currentStep - 1;
     setCurrentStep(prevStep);
   };
@@ -207,6 +256,8 @@ const Survey = () => {
       updatedInfo[info].value = updatedValue;
       setRespondentInfo(updatedInfo);
     },
+    questionError,
+    respondentError,
   };
   return (
     <SurveyContext.Provider value={contextValue}>
@@ -228,7 +279,7 @@ const Survey = () => {
           <Flex
             justifyContent={currentStep === null ? "flex-end" : "space-between"}
             alignItems="center"
-            mt={3}
+            my={3}
             w="100%"
           >
             {currentStep !== null && (
@@ -236,7 +287,11 @@ const Survey = () => {
                 Prev
               </Button>
             )}
-            <Button px={6} colorScheme="teal" onClick={onNextClick}>
+            <Button
+              px={6}
+              colorScheme="teal"
+              onClick={currentStep === null ? validateInfo : validateQuestion}
+            >
               {currentStep === null
                 ? "Start"
                 : currentStep === noOfQuestions - 1
