@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Flex, Text, Spinner, Button } from "@chakra-ui/react";
+import Lottie from "react-lottie";
+import animationData from "assets/success-lottie.json";
+
 import ErrorMessage from "components/ErrorMessage";
 
 const SubmitResponse = ({ closeModal, onSuccess }) => {
@@ -8,18 +11,28 @@ const SubmitResponse = ({ closeModal, onSuccess }) => {
     (state) => state.respondent.response
   );
 
+  const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   useEffect(() => {
     if (success) {
       setTimeout(() => {
         onSuccess();
-      }, 2500);
+      }, 3000);
     }
   }, [success, onSuccess]);
   return (
     <>
       <Flex
         flexDirection="column"
-        p={3}
+        px={success ? 0 : { base: 2, md: 3 }}
+        my={3}
         alignItems="center"
         justifyContent="center"
         height={150}
@@ -48,7 +61,7 @@ const SubmitResponse = ({ closeModal, onSuccess }) => {
           </>
         ) : (
           <>
-            <Text>Success!!</Text>
+            <Lottie options={defaultOptions} />
           </>
         )}
       </Flex>

@@ -19,7 +19,7 @@ const Modal = ({
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent mx={{ base: 2, md: 0 }}>
         {showHeader && (
           <>
             <ModalHeader>{title}</ModalHeader>
