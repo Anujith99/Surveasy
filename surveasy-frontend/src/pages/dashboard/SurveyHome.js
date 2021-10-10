@@ -241,17 +241,24 @@ const SurveyHome = () => {
               </Text>
             </Flex>
           ) : null}
-          <Tabs isFitted isLazy variant="line" mt={2} colorScheme="teal">
+          <Tabs
+            isFitted
+            isLazy
+            variant="line"
+            mt={2}
+            colorScheme="teal"
+            lazyBehavior="keepMounted"
+          >
             <TabList>
               <Tab>Questions</Tab>
-              <Tab>Responses</Tab>
+              <Tab>Responses Summary</Tab>
             </TabList>
             <TabPanels>
               <TabPanel p={0} pt={2}>
                 <QuestionsList />
               </TabPanel>
-              <TabPanel>
-                <Responses />
+              <TabPanel p={0} pt={2}>
+                <Responses surveyID={id} />
               </TabPanel>
             </TabPanels>
           </Tabs>
