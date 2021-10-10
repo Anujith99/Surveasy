@@ -1,17 +1,38 @@
 import { Box, Select } from "@chakra-ui/react";
-import React from "react";
+import FormError from "components/Forms/FormError";
+import { SurveyContext } from "helpers/context";
+import React, { useContext } from "react";
 
-const Dropdown = ({ options }) => {
+const Dropdown = ({ options, id }) => {
+  const context = useContext(SurveyContext);
+  const answer = context ? context.getAnswer(id).answer : undefined;
+
+  const handleChange = (e) => {
+    if (context) {
+      context.updateAnswer(id, e.target.value);
+    }
+  };
   return (
-    <Box>
-      <Select name="dropdown" w={"100%"} placeholder="Select an option">
-        {options.map((option) => (
-          <option key={option.id} value={option.value}>
-            {option.text}
-          </option>
-        ))}
-      </Select>
-    </Box>
+    <>
+      <Box>
+        <Select
+          name="dropdown"
+          w={"100%"}
+          placeholder="Select an option"
+          value={answer}
+          onChange={handleChange}
+        >
+          {options.map((option) => (
+            <option key={option.id} value={option.value}>
+              {option.text}
+            </option>
+          ))}
+        </Select>
+      </Box>
+      {context && context.questionError ? (
+        <FormError>Please select one option</FormError>
+      ) : null}
+    </>
   );
 };
 

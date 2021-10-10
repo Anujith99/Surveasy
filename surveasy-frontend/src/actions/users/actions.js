@@ -73,20 +73,15 @@ export const getCurrentUser = () => {
   return async (dispatch) => {
     await API.get("/dashboard/users/currentUser")
       .then((res) => {
-        console.log(res.data);
-        setTimeout(() => {
-          dispatch({
-            type: TYPES.GET_CURRENT_USER_SUCCESS,
-            payload: res.data,
-          });
-        }, 800);
+        dispatch({
+          type: TYPES.GET_CURRENT_USER_SUCCESS,
+          payload: res.data,
+        });
       })
       .catch((err) => {
-        setTimeout(() => {
-          dispatch({
-            type: TYPES.GET_CURRENT_USER_FAILED,
-          });
-        }, 1000);
+        dispatch({
+          type: TYPES.GET_CURRENT_USER_FAILED,
+        });
       });
   };
 };

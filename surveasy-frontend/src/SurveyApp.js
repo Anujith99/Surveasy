@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
+import SurveyRoutes from "routes/survey/SurveyRoutes";
 
 const SurveyApp = () => {
-  return (
-    <div>
-      <h1>Survey App</h1>
-    </div>
-  );
+  useEffect(() => {
+    return () => {
+      if (document.body.classList.contains("survey")) {
+        document.body.classList.remove("survey");
+      }
+    };
+  }, []);
+  return <SurveyRoutes />;
 };
 
 export default SurveyApp;

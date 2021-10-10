@@ -11,15 +11,17 @@ const QuestionCard = ({ question }) => {
   const renderInput = (questionType) => {
     switch (questionType) {
       case "shortText":
-        return <ShortText />;
+        return <ShortText id={question.questionId} />;
       case "longText":
-        return <LongText />;
+        return <LongText id={question.questionId} />;
       case "dropdown":
-        return <Dropdown options={question.options} />;
+        return <Dropdown id={question.questionId} options={question.options} />;
       case "mcq":
-        return <MCQ options={question.options} />;
+        return <MCQ id={question.questionId} options={question.options} />;
       case "checkbox":
-        return <Checkboxes options={question.options} />;
+        return (
+          <Checkboxes id={question.questionId} options={question.options} />
+        );
       default:
         return null;
     }
