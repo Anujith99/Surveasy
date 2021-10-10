@@ -11,6 +11,6 @@ export const isEmpty = (obj) => {
 };
 
 export const getRandomColor = () => {
-  let color = "hsl(" + Math.random() * 360 + ", 100%,75%";
+  let color = "hsl(" + Math.random() * 360 + ", 100%,75%)";
   return color;
 };

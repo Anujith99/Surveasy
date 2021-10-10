@@ -3,6 +3,7 @@ import { Flex, Text } from "@chakra-ui/react";
 
 import ResponsePieChart from "./ResponsePieChart";
 import { isEmpty } from "helpers/utils";
+import ResponseBarChart from "./ResponseBarChart";
 
 const ResponseCard = ({ response }) => {
   const [answerData, setAnswerData] = useState([]);
@@ -35,6 +36,8 @@ const ResponseCard = ({ response }) => {
       case "dropdown":
       case "mcq":
         return <ResponsePieChart answerData={answerData} labels={labels} />;
+      case "checkbox":
+        return <ResponseBarChart answerData={answerData} labels={labels} />;
       default:
         return null;
     }
