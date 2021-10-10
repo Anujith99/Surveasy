@@ -14,6 +14,8 @@ let path = window.location.pathname.split("/")[1];
 
 if (path === "survey") {
   document.body.classList.add("survey");
+} else if (document.body.classList.contains("survey")) {
+  document.body.classList.remove("survey");
 }
 
 ReactDOM.render(

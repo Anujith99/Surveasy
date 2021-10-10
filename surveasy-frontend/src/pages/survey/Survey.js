@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { Flex, Text, Button, Spinner } from "@chakra-ui/react";
+import { Flex, Text, Button, Spinner, Progress } from "@chakra-ui/react";
 import validator from "validator";
 import moment from "moment";
 
@@ -165,6 +165,18 @@ const SurveyForm = ({ survey }) => {
               <QuestionCard question={survey.surveyQuestions[currentStep]} />
             )}
             <Container mode="card" p={0}>
+              {currentStep !== null && (
+                <>
+                  <Progress
+                    value={currentStep + 1}
+                    max={noOfQuestions}
+                    mt={{ base: 1, md: 2 }}
+                    colorScheme="teal"
+                    borderRadius={5}
+                    backgroundColor="gray.200"
+                  />
+                </>
+              )}
               <Flex
                 justifyContent={
                   currentStep === null ? "flex-end" : "space-between"

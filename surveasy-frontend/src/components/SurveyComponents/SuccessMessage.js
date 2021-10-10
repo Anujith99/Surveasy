@@ -3,6 +3,7 @@ import Container from "components/Container";
 import { Flex, Text } from "@chakra-ui/react";
 import Lottie from "react-lottie";
 import animationData from "assets/submitted-lottie";
+import { Link } from "react-router-dom";
 
 const SuccessMessage = () => {
   const defaultOptions = {
@@ -25,11 +26,17 @@ const SuccessMessage = () => {
         <Flex justifyContent="center">
           <Lottie options={defaultOptions} width={"50%"} height={"50%"} />
         </Flex>
-        <Flex flexDirection="column" mt={-2}>
+        <Flex flexDirection="column" mt={-2} alignItems="center">
           <Text fontSize="xl" fontWeight="semibold">
             Your response has been submitted successfully!
           </Text>
           <Text mt={1}>Thank you for participating in this survey.</Text>
+          <Text fontWeight="medium" fontSize="lg" mt={3}>
+            Created Using{" "}
+            <Text as={Link} to="/" color="teal.500">
+              Surveasy
+            </Text>
+          </Text>
         </Flex>
       </Flex>
     </Container>
