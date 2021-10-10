@@ -6,7 +6,7 @@ export const getResponses = (id) => {
     dispatch({
       type: TYPES.GET_RESPONSES_LOADING,
     });
-    API.get("/response/summary/" + id)
+    API.get("/dashboard/summary/" + id)
       .then((res) => {
         dispatch({
           type: TYPES.GET_RESPONSES_SUCCESS,

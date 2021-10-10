@@ -4,6 +4,7 @@ import * as TYPES from "actions/responses/types";
 
 const initialResponsesState = {
   loading: false,
+  totalResponses: null,
   responses: [],
   error: false,
   errorMessage: null,
@@ -20,6 +21,7 @@ const responseSummaryReducer = (state = initialResponsesState, action) => {
       case TYPES.GET_RESPONSES_SUCCESS:
         draftState.loading = false;
         draftState.responses = action.payload.summary;
+        draftState.totalResponses = action.payload.totalResponses;
         break;
       case TYPES.GET_RESPONSES_FAILURE:
         draftState.loading = false;
