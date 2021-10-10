@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:responseId", responseController.getResponseById);
-router.get("/summary/:surveyId", responseController.getResponsesSummary);
 router.get("/survey/:surveyId", responseController.getAllResponsesBySurvey);
 router.post("/", responseController.createResponse);
 
