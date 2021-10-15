@@ -45,6 +45,7 @@ import Modal from "components/Modal";
 import SurveyForm from "components/Forms/SurveyForm";
 import QuestionsList from "components/QuestionsList";
 import Responses from "components/Responses";
+import ShareLink from "components/ShareLink";
 
 const ScrollToTopBtn = motion(Button);
 
@@ -60,11 +61,13 @@ const SurveyHome = () => {
   const [isActiveOpen, setActiveOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
+  const [isShareOpen, setShareOpen] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
   const onActiveClose = () => setActiveOpen(false);
   const onDeleteClose = () => setDeleteOpen(false);
   const onEditClose = () => setEditOpen(false);
+  const onShareClose = () => setShareOpen(false);
 
   const handleToggleActivation = () => {
     dispatch(toggleActivation(id, { isActive: !survey.isActive }));
@@ -162,7 +165,12 @@ const SurveyHome = () => {
                   {breakpoint === "base" ? (
                     <MenuItem icon={<Icon as={FaEye} />}>Preview</MenuItem>
                   ) : null}
-                  <MenuItem icon={<Icon as={FaLink} />}>Share Link</MenuItem>
+                  <MenuItem
+                    onClick={() => setShareOpen(true)}
+                    icon={<Icon as={FaLink} />}
+                  >
+                    Share Link
+                  </MenuItem>
                   <MenuItem
                     icon={<Icon as={FaPencilAlt} />}
                     onClick={() => setEditOpen(true)}
@@ -223,6 +231,12 @@ const SurveyHome = () => {
                   survey={survey}
                 />
               }
+            />
+            <Modal
+              isOpen={isShareOpen}
+              onClose={onShareClose}
+              title={"Share Link"}
+              body={<ShareLink surveyID={survey._id} />}
             />
           </Flex>
           {survey.surveyDescription && survey.surveyDescription.length !== 0 ? (

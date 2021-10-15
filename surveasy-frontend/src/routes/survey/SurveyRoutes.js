@@ -5,7 +5,7 @@ import { Route } from "react-router-dom";
 const SurveyRoutes = () => {
   return (
     <>
-      <Route exact={true} path="/survey/:id" component={Survey} />
+      <Route exact={true} path="/survey/:id/:preview?" component={Survey} />
     </>
   );
 };
