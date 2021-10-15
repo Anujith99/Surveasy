@@ -1,7 +1,9 @@
-import { getRandomColor } from "helpers/utils";
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Flex } from "@chakra-ui/layout";
+
+import { getRandomColor } from "helpers/utils";
 
 const ResponsePieChart = ({ answerData, labels }) => {
   const getBGColors = () => {
@@ -34,7 +36,14 @@ const ResponsePieChart = ({ answerData, labels }) => {
       },
     },
   };
-  return <Pie data={data} plugins={[ChartDataLabels]} options={options} />;
+  return (
+    <Flex
+      position="relative"
+      width={{ base: "100%", sm: "80%", md: "65%", lg: "50%" }}
+    >
+      <Pie data={data} plugins={[ChartDataLabels]} options={options} />;
+    </Flex>
+  );
 };
 
 export default ResponsePieChart;

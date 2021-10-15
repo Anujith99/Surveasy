@@ -4,6 +4,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import ResponsePieChart from "./ResponsePieChart";
 import { isEmpty } from "helpers/utils";
 import ResponseBarChart from "./ResponseBarChart";
+import ResponseAccordion from "./ResponseAccordion";
 
 const ResponseCard = ({ response }) => {
   const [answerData, setAnswerData] = useState([]);
@@ -28,6 +29,9 @@ const ResponseCard = ({ response }) => {
         }
       });
       setAnswerData(Object.values(parsedData));
+    } else {
+      parsedData = answers.filter((ans) => ans.answer.length !== 0);
+      setAnswerData(parsedData);
     }
   };
   const renderChart = () => {
@@ -38,6 +42,9 @@ const ResponseCard = ({ response }) => {
         return <ResponsePieChart answerData={answerData} labels={labels} />;
       case "checkbox":
         return <ResponseBarChart answerData={answerData} labels={labels} />;
+      case "shortText":
+      case "longText":
+        return <ResponseAccordion answerData={answerData} />;
       default:
         return null;
     }
@@ -53,7 +60,11 @@ const ResponseCard = ({ response }) => {
       mb={3}
     >
       <Text fontSize={{ base: "lg", md: "xl" }}>{response.questionTitle}</Text>
-      {~isEmpty(response) && <Flex mt={2}>{renderChart()}</Flex>}
+      {~isEmpty(response) && (
+        <Flex mt={2} justifyContent="center">
+          {renderChart()}
+        </Flex>
+      )}
     </Flex>
   );
 };

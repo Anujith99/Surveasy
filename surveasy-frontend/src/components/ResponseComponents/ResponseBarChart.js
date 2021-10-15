@@ -1,7 +1,8 @@
-import { getRandomColor } from "helpers/utils";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Flex } from "@chakra-ui/layout";
+import { getRandomColor } from "helpers/utils";
 
 const ResponseBarChart = ({ answerData, labels }) => {
   const getBGColors = () => {
@@ -31,7 +32,14 @@ const ResponseBarChart = ({ answerData, labels }) => {
       },
     },
   };
-  return <Bar data={data} plugins={[ChartDataLabels]} options={options} />;
+  return (
+    <Flex
+      pos="relative"
+      width={{ base: "100%", sm: "85%", md: "75%", lg: "65%" }}
+    >
+      <Bar data={data} plugins={[ChartDataLabels]} options={options} />
+    </Flex>
+  );
 };
 
 export default ResponseBarChart;
