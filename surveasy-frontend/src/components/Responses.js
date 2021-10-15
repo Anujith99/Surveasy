@@ -1,7 +1,15 @@
 import React, { useEffect, memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Flex, Text, Button, Icon, Tooltip, Spinner } from "@chakra-ui/react";
-import { FaFileExcel, FaPrint } from "react-icons/fa";
+import {
+  Flex,
+  Text,
+  Button,
+  Icon,
+  Tooltip,
+  Spinner,
+  Box,
+} from "@chakra-ui/react";
+import { FaFileExcel } from "react-icons/fa";
 import Container from "./Container";
 import ResponseCard from "./ResponseComponents/ResponseCard";
 import { clearResponses, getResponses } from "actions/responses/actions";
@@ -32,6 +40,15 @@ const Responses = ({ surveyID }) => {
               : "Could not fetch the responses."}
           </ErrorMessage>
         </Container>
+      ) : responses.length === 0 ? (
+        <Flex w={"100%"} justifyContent="center">
+          <Box w="290px" textAlign="center" color="gray.600" mt={4}>
+            <Text fontSize="2xl">You have no responses!</Text>
+            <Text mt={2}>
+              The survey must be activated to accept responses.
+            </Text>
+          </Box>
+        </Flex>
       ) : (
         <>
           <Flex justifyContent="space-between" alignItems="center">
@@ -40,13 +57,8 @@ const Responses = ({ surveyID }) => {
             </Text>
             <Flex>
               <Tooltip label="Generate Excel Sheet">
-                <Button colorScheme="teal" mr={1.5} p={0}>
-                  <Icon as={FaFileExcel} />
-                </Button>
-              </Tooltip>
-              <Tooltip label="Print Summary">
-                <Button colorScheme="teal" p={0}>
-                  <Icon as={FaPrint} />
+                <Button colorScheme="teal" leftIcon={<Icon as={FaFileExcel} />}>
+                  Create
                 </Button>
               </Tooltip>
             </Flex>

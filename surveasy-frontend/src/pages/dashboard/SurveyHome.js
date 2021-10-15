@@ -18,7 +18,6 @@ import {
   MenuList,
   MenuItem,
   useBreakpointValue,
-  Collapse,
   Tabs,
   TabList,
   Tab,
@@ -61,7 +60,6 @@ const SurveyHome = () => {
   const [isActiveOpen, setActiveOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [isEditOpen, setEditOpen] = useState(false);
-  const [showDesc, setShowDesc] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
   const onActiveClose = () => setActiveOpen(false);
@@ -228,17 +226,8 @@ const SurveyHome = () => {
             />
           </Flex>
           {survey.surveyDescription && survey.surveyDescription.length !== 0 ? (
-            <Flex flexDirection="column">
-              <Collapse in={showDesc}>{survey.surveyDescription}</Collapse>
-              <Text
-                size="lg"
-                color="teal.500"
-                cursor="pointer"
-                onClick={() => setShowDesc(!showDesc)}
-                _hover={{ color: "teal.400" }}
-              >
-                {showDesc ? "Hide" : "Show"} Description
-              </Text>
+            <Flex wrap="wrap" maxWidth={"500px"}>
+              <Text>{survey.surveyDescription}</Text>
             </Flex>
           ) : null}
           <Tabs
