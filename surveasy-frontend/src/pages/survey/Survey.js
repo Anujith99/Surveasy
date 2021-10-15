@@ -16,7 +16,7 @@ import { getQuestions, submitResponse } from "actions/respondent/actions";
 import ErrorMessage from "components/ErrorMessage";
 import SuccessMessage from "components/SurveyComponents/SuccessMessage";
 
-const SurveyForm = ({ survey }) => {
+const SurveyForm = ({ survey, isPreview }) => {
   const dispatch = useDispatch();
   const [currentStep, setCurrentStep] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -107,8 +107,9 @@ const SurveyForm = ({ survey }) => {
         respondentInfo: Object.values(respondentInfo),
         answers: Object.values(answers),
       };
-      console.log(data);
-      dispatch(submitResponse(data));
+      if (!isPreview) {
+        dispatch(submitResponse(data));
+      }
       setIsModalVisible(true);
     } else {
       const nextStep = currentStep === null ? 0 : currentStep + 1;
@@ -128,6 +129,7 @@ const SurveyForm = ({ survey }) => {
   };
 
   const contextValue = {
+    isPreview,
     respondentInfo,
     answers,
     getAnswer: (id) => answers[id],
@@ -147,7 +149,7 @@ const SurveyForm = ({ survey }) => {
   return (
     <>
       {isEmpty(survey) ? null : isSubmitted ? (
-        <SuccessMessage />
+        <SuccessMessage isPreview={isPreview} />
       ) : (
         <SurveyContext.Provider value={contextValue}>
           <Flex
@@ -227,7 +229,7 @@ const SurveyForm = ({ survey }) => {
 
 const Survey = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id, preview } = useParams();
   const { loading, survey, error, errorMessage } = useSelector(
     (state) => state.respondent.questions
   );
@@ -236,6 +238,24 @@ const Survey = () => {
   }, [dispatch, id]);
   return (
     <>
+      {preview && (
+        <Flex
+          width="100%"
+          backgroundColor="white"
+          justifyContent="center"
+          py={2}
+          shadow="md"
+          sx={{ postition: "-webkit-sticky", position: "sticky", top: "0" }}
+        >
+          <Text
+            fontSize={{ base: "lg", md: "xl" }}
+            color="teal.500"
+            fontWeight="semibold"
+          >
+            PREVIEW
+          </Text>
+        </Flex>
+      )}
       {loading ? (
         <Flex h={"100%"} alignItems="center">
           <Container mode="card" p={0}>
@@ -273,7 +293,7 @@ const Survey = () => {
           </Container>
         </Flex>
       ) : (
-        <SurveyForm survey={survey} />
+        <SurveyForm survey={survey} isPreview={preview} />
       )}
     </>
   );

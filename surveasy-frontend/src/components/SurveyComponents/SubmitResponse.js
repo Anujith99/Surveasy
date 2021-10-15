@@ -1,16 +1,53 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import { Flex, Text, Spinner, Button } from "@chakra-ui/react";
 import Lottie from "react-lottie";
 import animationData from "assets/success-lottie.json";
 
 import ErrorMessage from "components/ErrorMessage";
+import { SurveyContext } from "helpers/context";
+
+const DummyResponse = ({ onSuccess, defaultOptions }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        onSuccess();
+      }, 3000);
+    }
+  }, [loading, onSuccess]);
+
+  return (
+    <>
+      {loading ? (
+        <>
+          <Spinner color="teal.500" size="xl" thickness={4} />
+          <Text mt={4} fontWeight="medium" fontSize="lg">
+            Submitting...
+          </Text>
+        </>
+      ) : (
+        <>
+          <Lottie options={defaultOptions} />
+        </>
+      )}
+    </>
+  );
+};
 
 const SubmitResponse = ({ closeModal, onSuccess }) => {
   const { loading, success, error } = useSelector(
     (state) => state.respondent.response
   );
 
+  const { isPreview } = useContext(SurveyContext);
   const defaultOptions = {
     loop: false,
     autoplay: true,
@@ -37,7 +74,12 @@ const SubmitResponse = ({ closeModal, onSuccess }) => {
         justifyContent="center"
         height={150}
       >
-        {loading ? (
+        {isPreview ? (
+          <DummyResponse
+            onSuccess={onSuccess}
+            defaultOptions={defaultOptions}
+          />
+        ) : loading ? (
           <>
             <Spinner color="teal.500" size="xl" thickness={4} />
             <Text mt={4} fontWeight="medium" fontSize="lg">

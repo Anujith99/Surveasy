@@ -5,7 +5,7 @@ import Lottie from "react-lottie";
 import animationData from "assets/submitted-lottie";
 import { Link } from "react-router-dom";
 
-const SuccessMessage = () => {
+const SuccessMessage = ({ isPreview }) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -23,8 +23,18 @@ const SuccessMessage = () => {
         shadow="sm"
         borderRadius={4}
       >
+        {isPreview && (
+          <Text textAlign="center" fontWeight="medium">
+            Preview Responses Are Not Saved
+          </Text>
+        )}
         <Flex justifyContent="center">
-          <Lottie options={defaultOptions} width={"50%"} height={"50%"} />
+          <Lottie
+            options={defaultOptions}
+            width={"50%"}
+            height={"50%"}
+            isClickToPauseDisabled={true}
+          />
         </Flex>
         <Flex flexDirection="column" mt={-2} alignItems="center">
           <Text fontSize="xl" fontWeight="semibold">
