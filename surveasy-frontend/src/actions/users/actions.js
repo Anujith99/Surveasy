@@ -85,3 +85,33 @@ export const getCurrentUser = () => {
       });
   };
 };
+
+export const updateUser = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: TYPES.USER_PROFILE_UPDATE_LOADING,
+    });
+    await API.put("/dashboard/users/profile", data)
+      .then((res) => {
+        dispatch({
+          type: TYPES.USER_PROFILE_UPDATE_SUCCESS,
+        });
+        dispatch({
+          type: TYPES.GET_CURRENT_USER_SUCCESS,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: TYPES.USER_PROFILE_UPDATE_FAILED,
+          payload: err.response || {},
+        });
+      });
+  };
+};
+
+export const resetState = () => {
+  return async (dispatch) => {
+    dispatch({ type: TYPES.USER_PROFILE_UPDATE_RESET });
+  };
+};

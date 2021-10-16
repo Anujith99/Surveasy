@@ -7,7 +7,6 @@ const useClearState = (actionType) => {
 
   useEffect(() => {
     return () => {
-      console.log("Clear state");
       dispatch({ type: actionType });
     };
   }, [dispatch, actionType]);

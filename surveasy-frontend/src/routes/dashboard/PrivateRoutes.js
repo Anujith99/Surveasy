@@ -4,9 +4,11 @@ import PrivateLayout from "layouts/dashboard/PrivateLayout";
 import DashboardHome from "pages/dashboard/DashboardHome";
 import SurveyHome from "pages/dashboard/SurveyHome";
 import EditSurvey from "pages/dashboard/EditSurvey";
+import UserProfile from "pages/dashboard/UserProfile";
 
 const privateLayoutRoutes = [
   { exact: true, path: "/dashboard", component: DashboardHome },
+  { exact: true, path: "/dashboard/profile", component: UserProfile },
   { exact: true, path: "/dashboard/survey/:id", component: SurveyHome },
   { exact: true, path: "/dashboard/survey/:id/edit", component: EditSurvey },
 ];

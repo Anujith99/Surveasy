@@ -83,7 +83,9 @@ const UserAvatar = () => {
           </Flex>
         </MenuItem>
         <MenuDivider />
-        <MenuItem icon={<FaUserAlt />}>Profile</MenuItem>
+        <MenuItem as={Link} to="/dashboard/profile" icon={<FaUserAlt />}>
+          Profile
+        </MenuItem>
         <MenuItem onClick={logout} icon={<FaSignOutAlt />}>
           Sign Out
         </MenuItem>

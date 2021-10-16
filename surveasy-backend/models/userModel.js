@@ -15,7 +15,13 @@ const userSchema = mongoose.Schema(
     lastName: {
       type: mongoose.SchemaTypes.String,
       validate: [
-        (val) => validator.isAlpha(val),
+        (val) => {
+          if (val.length) {
+            return validator.isAlpha(val);
+          } else {
+            return true;
+          }
+        },
         "Last Name must be only letters",
       ],
     },
