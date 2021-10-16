@@ -3,6 +3,9 @@ import Response from "../models/responseModel.js";
 import createError from "../utils/createError.js";
 import logger from "../config/logger.js";
 
+import excel from "exceljs";
+import { getDate, getHeaders, getRows } from "../utils/spreadsheetUtils.js";
+
 const getAllResponsesBySurvey = async (req, res, next) => {
   const { surveyId } = req.params;
   logger.info(surveyId);
@@ -98,9 +101,49 @@ const createResponse = async (req, res, next) => {
   }
 };
 
+const getResponsesSheet = async (req, res, next) => {
+  const { surveyId } = req.params;
+  logger.info(surveyId);
+  try {
+    let responses = await Response.find({ surveyId });
+    if (responses.length === 0) {
+      throw createError(404, "There are no responses for this survey");
+    }
+    let workbook = new excel.Workbook();
+    let worksheet = workbook.addWorksheet("Responses");
+    let headers = getHeaders(responses[0]);
+    let rows = getRows(responses);
+    worksheet.columns = headers;
+    worksheet.addRows(rows);
+
+    worksheet.views = [{ state: "frozen", xSplit: 0, ySplit: 1 }];
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).border = {
+      top: { style: "thin" },
+      left: { style: "thin" },
+      bottom: { style: "thin" },
+      right: { style: "thin" },
+    };
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=" + `Responses for ${getDate()}.xlsx`
+    );
+    return workbook.xlsx.write(res).then(function () {
+      res.status(200).end();
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getAllResponsesBySurvey,
   getResponseById,
   createResponse,
   getResponsesSummary,
+  getResponsesSheet,
 };

@@ -19,5 +19,6 @@ router.get(
   protect,
   responseController.getResponsesSummary
 );
+router.get("/spreadsheet/:surveyId", responseController.getResponsesSheet);
 
 export default router;
