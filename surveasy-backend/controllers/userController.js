@@ -127,7 +127,7 @@ export const updateUser = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       userID,
       { $set: req.body },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!user) {

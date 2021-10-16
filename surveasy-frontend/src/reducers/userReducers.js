@@ -64,6 +64,42 @@ const registerReducer = (state = initialFormState, action) => {
   });
 };
 
+const profileReducer = (
+  state = { ...initialFormState, success: false },
+  action
+) => {
+  return produce(state, (draftState) => {
+    switch (action.type) {
+      case TYPES.USER_PROFILE_UPDATE_LOADING:
+        draftState.loading = true;
+        draftState.error = false;
+        draftState.errorMessage = null;
+        draftState.success = false;
+        break;
+      case TYPES.USER_PROFILE_UPDATE_SUCCESS:
+        draftState.loading = false;
+        draftState.success = true;
+        break;
+      case TYPES.USER_PROFILE_UPDATE_FAILED:
+        draftState.loading = false;
+        draftState.error = true;
+        if (action.payload.data) {
+          draftState.errorMessage = action.payload.data.message;
+        } else {
+          draftState.errorMessage = null;
+        }
+        break;
+      case TYPES.USER_PROFILE_UPDATE_RESET:
+        return {
+          ...initialFormState,
+          success: false,
+        };
+      default:
+        break;
+    }
+  });
+};
+
 const initialUserState = {
   loading: true,
   userInfo: {},
@@ -108,4 +144,5 @@ export default combineReducers({
   login: loginReducer,
   register: registerReducer,
   info: userInfoReducer,
+  profile: profileReducer,
 });
