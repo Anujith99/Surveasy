@@ -11,5 +11,6 @@ router.post("/login", userController.login);
 router.post("/logout", userController.logout);
 
 router.get("/currentUser", protect, userController.getUser);
+router.put("/profile", protect, userController.updateUser);
 
 export default router;

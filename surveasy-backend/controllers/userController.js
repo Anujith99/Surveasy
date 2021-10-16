@@ -88,7 +88,7 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = (req, res) => {
+const logout = (req, res, next) => {
   try {
     res
       .clearCookie("authToken", cookieOptions)
@@ -98,7 +98,7 @@ const logout = (req, res) => {
   }
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   try {
     const { user } = req;
 
@@ -120,4 +120,30 @@ const getUser = (req, res) => {
   }
 };
 
-export default { register, login, logout, getUser };
+export const updateUser = async (req, res, next) => {
+  try {
+    const userID = req.user._id;
+
+    const user = await User.findByIdAndUpdate(
+      userID,
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!user) {
+      throw createError(404, "User does not exist");
+    }
+
+    let userResponse = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    };
+
+    res.json({ user: userResponse });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { register, login, logout, getUser, updateUser };
