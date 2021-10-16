@@ -6,7 +6,7 @@ const ErrorMessage = ({ children }) => {
   return (
     <Box
       py={{ base: 2, md: 3 }}
-      px={{ base: 3, md: 5 }}
+      px={{ base: 2, md: 4 }}
       border="1px"
       borderColor="red.500"
       borderRadius="10px"

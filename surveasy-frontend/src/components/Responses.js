@@ -26,6 +26,12 @@ const Responses = ({ surveyID }) => {
     };
   }, [dispatch, surveyID]);
 
+  const downloadExcel = () => {
+    let downloadURL =
+      process.env.REACT_APP_API_URL + "/dashboard/spreadsheet/" + surveyID;
+    window.open(downloadURL, "_blank");
+  };
+
   return (
     <>
       {loading ? (
@@ -57,7 +63,11 @@ const Responses = ({ surveyID }) => {
             </Text>
             <Flex>
               <Tooltip label="Generate Excel Sheet">
-                <Button colorScheme="teal" leftIcon={<Icon as={FaFileExcel} />}>
+                <Button
+                  onClick={downloadExcel}
+                  colorScheme="teal"
+                  leftIcon={<Icon as={FaFileExcel} />}
+                >
                   Create
                 </Button>
               </Tooltip>

@@ -19,10 +19,6 @@ router.get(
   protect,
   responseController.getResponsesSummary
 );
-router.get(
-  "/spreadsheet/:surveyId",
-  protect,
-  responseController.getResponsesSheet
-);
+router.get("/spreadsheet/:surveyId", responseController.getResponsesSheet);
 
 export default router;
