@@ -39,7 +39,6 @@ const EditSurvey = () => {
 
   useEffect(() => {
     let timer = setTimeout(() => {
-      console.log("CALL API");
       dispatch(editSurvey(id, updatedSurvey));
     }, 500);
 

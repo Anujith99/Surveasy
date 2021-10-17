@@ -166,47 +166,49 @@ const SurveyForm = ({ survey, isPreview }) => {
             ) : (
               <QuestionCard question={survey.surveyQuestions[currentStep]} />
             )}
-            <Container mode="card" p={0}>
-              {currentStep !== null && (
-                <>
-                  <Progress
-                    value={currentStep + 1}
-                    max={noOfQuestions}
-                    mt={{ base: 1, md: 2 }}
-                    colorScheme="teal"
-                    borderRadius={5}
-                    backgroundColor="gray.200"
-                  />
-                </>
-              )}
-              <Flex
-                justifyContent={
-                  currentStep === null ? "flex-end" : "space-between"
-                }
-                alignItems="center"
-                my={3}
-                w="100%"
-              >
+            {noOfQuestions && (
+              <Container mode="card" p={0}>
                 {currentStep !== null && (
-                  <Button px={6} colorScheme="teal" onClick={onPrevClick}>
-                    Prev
-                  </Button>
+                  <>
+                    <Progress
+                      value={currentStep + 1}
+                      max={noOfQuestions}
+                      mt={{ base: 1, md: 2 }}
+                      colorScheme="teal"
+                      borderRadius={5}
+                      backgroundColor="gray.200"
+                    />
+                  </>
                 )}
-                <Button
-                  px={6}
-                  colorScheme="teal"
-                  onClick={
-                    currentStep === null ? validateInfo : validateQuestion
+                <Flex
+                  justifyContent={
+                    currentStep === null ? "flex-end" : "space-between"
                   }
+                  alignItems="center"
+                  my={3}
+                  w="100%"
                 >
-                  {currentStep === null
-                    ? "Start"
-                    : currentStep === noOfQuestions - 1
-                    ? "Finish"
-                    : "Next"}
-                </Button>
-              </Flex>
-            </Container>
+                  {currentStep !== null && (
+                    <Button px={6} colorScheme="teal" onClick={onPrevClick}>
+                      Prev
+                    </Button>
+                  )}
+                  <Button
+                    px={6}
+                    colorScheme="teal"
+                    onClick={
+                      currentStep === null ? validateInfo : validateQuestion
+                    }
+                  >
+                    {currentStep === null
+                      ? "Start"
+                      : currentStep === noOfQuestions - 1
+                      ? "Finish"
+                      : "Next"}
+                  </Button>
+                </Flex>
+              </Container>
+            )}
           </Flex>
           <Modal
             isOpen={isModalVisible}
@@ -284,7 +286,7 @@ const Survey = () => {
             </ErrorMessage>
           </Container>
         </Flex>
-      ) : !survey.isActive ? (
+      ) : !preview && !survey.isActive ? (
         <Flex h="100%" alignItems="center">
           <Container mode="card" p={0}>
             <ErrorMessage>

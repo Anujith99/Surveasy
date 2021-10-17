@@ -138,6 +138,10 @@ const SurveyHome = () => {
                   colorScheme="teal"
                   px={1}
                   display={{ base: "none", sm: "flex" }}
+                  as={Link}
+                  to={`/survey/${id}/preview`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <FaEye />
                 </Button>
@@ -163,7 +167,15 @@ const SurveyHome = () => {
                     </MenuItem>
                   ) : null}
                   {breakpoint === "base" ? (
-                    <MenuItem icon={<Icon as={FaEye} />}>Preview</MenuItem>
+                    <MenuItem
+                      as={Link}
+                      to={`/survey/${id}/preview`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      icon={<Icon as={FaEye} />}
+                    >
+                      Preview
+                    </MenuItem>
                   ) : null}
                   <MenuItem
                     onClick={() => setShareOpen(true)}
@@ -240,7 +252,7 @@ const SurveyHome = () => {
             />
           </Flex>
           {survey.surveyDescription && survey.surveyDescription.length !== 0 ? (
-            <Flex wrap="wrap" maxWidth={"500px"}>
+            <Flex wrap="wrap" maxWidth={"600px"}>
               <Text>{survey.surveyDescription}</Text>
             </Flex>
           ) : null}

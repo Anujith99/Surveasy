@@ -37,8 +37,6 @@ const SignInForm = ({ location }) => {
 
   const redirectTo = location.state ? location.state.from : "/dashboard";
 
-  console.log(location);
-
   const onSubmit = (data) => {
     dispatch(loginUser(data, redirectTo));
   };
