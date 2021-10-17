@@ -28,7 +28,7 @@ const Responses = ({ surveyID }) => {
 
   const downloadExcel = () => {
     let downloadURL =
-      process.env.REACT_APP_API_URL + "/dashboard/spreadsheet/" + surveyID;
+      process.env.REACT_APP_API_URL + "dashboard/spreadsheet/" + surveyID;
     window.open(downloadURL, "_blank");
   };
 
