@@ -10,8 +10,9 @@ import {
   useClipboard,
   Tooltip,
 } from "@chakra-ui/react";
-import { FaCopy } from "react-icons/fa";
+import { FaCopy, FaExternalLinkAlt } from "react-icons/fa";
 import tinyurl from "tinyurl";
+import { Link } from "react-router-dom";
 
 const ShareLink = ({ surveyID }) => {
   const URL = window.location.origin + "/survey/" + surveyID;
@@ -29,7 +30,14 @@ const ShareLink = ({ surveyID }) => {
     <Flex flexDirection="column">
       <Flex flexDirection="column">
         <Text fontSize="lg" fontWeight="medium" mb={1}>
-          Complete URL
+          Complete URL{" "}
+          <Link
+            to={`/survey/${surveyID}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon as={FaExternalLinkAlt} color="teal.500" mb={1.5} ml={1} />
+          </Link>
         </Text>
         <InputGroup>
           <Input isReadOnly value={URL} />
@@ -58,7 +66,17 @@ const ShareLink = ({ surveyID }) => {
       {shortURL.length !== 0 && (
         <Flex flexDirection="column" my={2}>
           <Text fontSize="lg" fontWeight="medium" mb={1}>
-            Shortened URL
+            Shortened URL{" "}
+            <Icon
+              as={FaExternalLinkAlt}
+              color="teal.500"
+              mb={1.5}
+              ml={1}
+              cursor="pointer"
+              onClick={() => {
+                window.open(shortURL, "_blank");
+              }}
+            />
           </Text>
           <InputGroup>
             <Input isReadOnly value={shortURL} />

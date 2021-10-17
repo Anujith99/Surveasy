@@ -59,11 +59,13 @@ const updateSurvey = async (req, res, next) => {
 
 const deleteSurvey = async (req, res, next) => {
   try {
-    let survey = await Survey.findByIdAndRemove(req.params.id);
+    let survey = await Survey.findById(req.params.id);
 
     if (!survey) {
       throw createError(404, "Survey with this ID does not exist.");
     }
+
+    await survey.remove();
 
     res.json({ message: "Survey Deleted Successfully" });
   } catch (error) {

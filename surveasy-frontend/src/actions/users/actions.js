@@ -10,7 +10,6 @@ export const loginUser = (loginCredentials, redirectTo) => {
 
     await API.post("/dashboard/users/login", loginCredentials)
       .then((res) => {
-        console.log(res.data);
         dispatch({ type: TYPES.USER_LOGIN_SUCCESS, payload: res.data });
         history.push(redirectTo);
       })
@@ -31,7 +30,6 @@ export const registerUser = (userData) => {
 
     await API.post("/dashboard/users/register", userData)
       .then((res) => {
-        console.log(res.data);
         dispatch({ type: TYPES.USER_REGISTER_SUCCESS, payload: res.data });
         history.push("/dashboard");
       })
@@ -51,7 +49,6 @@ export const logoutUser = () => {
     });
     await API.post("/dashboard/users/logout")
       .then((res) => {
-        console.log(res.data);
         setTimeout(() => {
           dispatch({
             type: TYPES.USER_LOGOUT_SUCCESS,
@@ -60,7 +57,6 @@ export const logoutUser = () => {
         }, 800);
       })
       .catch((err) => {
-        console.log(err);
         dispatch({
           type: TYPES.USER_LOGOUT_FAILED,
           payload: "Logout Failed. Please try again.",

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import Logger from "../config/logger";
+import Response from "./responseModel";
 
 const questionSchema = mongoose.Schema(
   {
@@ -81,6 +83,12 @@ const surveySchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+surveySchema.pre("remove", function (next) {
+  Response.remove({ surveyId: this._id }).exec();
+  Logger.info("Responses removed");
+  next();
+});
 
 const Survey = mongoose.model("Survey", surveySchema);
 
