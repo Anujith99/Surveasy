@@ -14,8 +14,8 @@ Some of the technologies that I used for the backend are:
 
 For the frontend I used:
 - [Chakra UI](https://www.npmjs.com/package/@chakra-ui/react) to build a simple and beautiful user interface.
-- [react-chartjs-2] to build graphs and charts.
-- [react-beautiful-dnd] for a seamless drag and drop experience.
+- [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2) to build graphs and charts.
+- [react-beautiful-dnd](https://www.npmjs.com/package/react-beautiful-dnd) for a seamless drag and drop experience.
 - [Redux](https://www.npmjs.com/package/redux) for global state management and [react-hook-form](https://www.npmjs.com/package/react-hook-form) for form state management.
 
 The frontend code was deployed on [Netlify](https://www.netlify.com/) and the backend on [Heroku](https://www.heroku.com/). Click [here](https://its-surveasy.netlify.app/) to go to Surveasy and click [here](https://tinyurl.com/yem9shpn) to view a survey created using Surveasy.
@@ -32,4 +32,4 @@ The frontend code was deployed on [Netlify](https://www.netlify.com/) and the ba
 6. When your respondents have submitted their responses, you can view a summary of all the responses in the 'Responses Summary' tab. You can also download an Excel file with the list of all the responses, including the respondent information of each respondent.
 
 
-Feel free to play around with Surveasy as well as go through the codebase. I am open to any kind of feedback. You can reach me at <banuj99@gmail.com>.
+Feel free to play around with Surveasy as well as go through the codebase. I am open to any kind of feedback. You can reach me at <anujith.b.dev@gmail.com>.
