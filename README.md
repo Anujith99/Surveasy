@@ -21,7 +21,7 @@ For the frontend I used:
 - [react-beautiful-dnd](https://www.npmjs.com/package/react-beautiful-dnd) for a seamless drag and drop experience.
 - [Redux](https://www.npmjs.com/package/redux) for global state management and [react-hook-form](https://www.npmjs.com/package/react-hook-form) for form state management.
 
-The frontend code was deployed on [Netlify](https://www.netlify.com/) and the backend on [Heroku](https://www.heroku.com/). Click [here](https://its-surveasy.netlify.app/) to go to Surveasy and click [here](https://tinyurl.com/yem9shpn) to view a survey created using Surveasy.
+The frontend code was deployed on [Netlify](https://www.netlify.com/) and the backend on [Heroku](https://www.heroku.com/) before it was moved to [Render](https://render.com/). Click [here](https://its-surveasy.netlify.app/) to go to Surveasy and click [here](https://tinyurl.com/yem9shpn) to view a survey created using Surveasy.
 
 ## How to use Surveasy
 
