@@ -21,7 +21,7 @@ For the frontend I used:
 - [react-beautiful-dnd](https://www.npmjs.com/package/react-beautiful-dnd) for a seamless drag and drop experience.
 - [Redux](https://www.npmjs.com/package/redux) for global state management and [react-hook-form](https://www.npmjs.com/package/react-hook-form) for form state management.
 
-The frontend code was deployed on [Netlify](https://www.netlify.com/) and the backend on [Heroku](https://www.heroku.com/) before it was moved to [Render](https://render.com/). Click [here](https://its-surveasy.netlify.app/) to go to Surveasy and click [here](https://tinyurl.com/yem9shpn) to view a survey created using Surveasy.
+The frontend code was deployed on [Netlify](https://www.netlify.com/) and the backend on [Heroku](https://www.heroku.com/) before it was moved to [Render](https://render.com/). Click [here](https://its-surveasy.netlify.app/) to go to Surveasy and click [here](https://tinyurl.com/283tg4hv) to view a survey created using Surveasy.
 
 ## How to use Surveasy
 
@@ -33,7 +33,7 @@ The frontend code was deployed on [Netlify](https://www.netlify.com/) and the ba
 2. Next, click 'Create' and enter the survey title. The survey description is optional.
 3. Then under the 'Questions' Tab click on the 'Edit' button to start creating your survey. Here, you can add/delete questions, add a description, make the question required, change the question type, reorder the questions,etc.. You can also choose the personal information that you would like the respondent to enter.
 4. After you have created all your questions, go back to the survey home page and click on the eye icon to preview the survey.
-5. Once you are confident with your survey, you can share the survey link with your respondents by opening the menu on clicking on "Share Link".
+5. Once you are confident with your survey, you can share the survey link with your respondents by opening the menu on clicking on "Share Link". Here you can copy the full URL or a shortened URL
 6. When your respondents have submitted their responses, you can view a summary of all the responses in the 'Responses Summary' tab. You can also download an Excel file with the list of all the responses, including the respondent information of each respondent.
 
 Feel free to play around with Surveasy as well as go through the codebase. I am open to any kind of feedback. You can reach me at <anujith.b.dev@gmail.com>.
@@ -43,4 +43,7 @@ Feel free to play around with Surveasy as well as go through the codebase. I am 
 ![Survey Dashboard](./screenshots/surveasy-page1.PNG)
 ![Editing Survey Page](./screenshots/surveasy-page.PNG)
 ![Creating Survey](./screenshots/surveasy-page2.PNG)
+![Share Link](https://github.com/user-attachments/assets/a29dad24-56d7-4b1c-9a8c-088851c351c4)
+![Survey Responses](https://github.com/user-attachments/assets/65b13527-f486-4314-836c-aa59b8b5db9a)
+
 ![Final Survey Result](./screenshots/surveasy-page3.PNG)
